@@ -109,16 +109,16 @@ protected:
     bool reconstruct_all() override;
 
     bool create_skeleton_drawable(SkeletonType type, int skeleton_index);
-    bool update_importance_visuals_edges(SkeletonType type, int ts_index);
-    bool update_importance_visuals_vertices(SkeletonType type, int ts_index);
+    bool update_importance_visuals_edges(SkeletonType type, int ts_index, bool show);
+    bool update_importance_visuals_vertices(SkeletonType type, int ts_index, bool show);
     bool create_normals_drawable(int ts_index);
-    bool update_correspondence_visuals(SkeletonType type, int ts_index);
+    bool update_correspondence_visuals(SkeletonType type, int ts_index, bool show);
     bool create_main_skeleton_drawable(SkeletonType type, int ts_index);
-    bool show_vertex_correspondence(SkeletonType type, int ts_index);
-    bool show_edge_correspondence(SkeletonType type, int ts_index);
-    bool show_bifur(SkeletonType type, int ts_index);
-    bool show_lobes(SkeletonType type, int ts_index);
-    bool show_skeleton_distance(SkeletonType type, int ts_index);
+    bool show_vertex_correspondence(SkeletonType type, int ts_index, bool show);
+    bool show_edge_correspondence(SkeletonType type, int ts_index, bool show);
+    bool show_bifur(SkeletonType type, int ts_index, bool show);
+    bool show_lobes(SkeletonType type, int ts_index, bool show);
+    bool show_skeleton_distance(SkeletonType type, int ts_index, bool show);
     bool create_lobe_skeleton_drawable(SkeletonType type, int ts_index);
 
     bool create_inter_skeleton_drawable(int item_index);

@@ -218,7 +218,7 @@ bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int
 
     // vertex importance
     if (item_index == 1){
-        update_importance_visuals_vertices(skel_type, ts_index);
+        update_importance_visuals_vertices(skel_type, ts_index, show);
         return true;
     }
     // normals
@@ -245,14 +245,14 @@ bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int
     if (item_index == 4){
         if (!graph_drawable)
             create_skeleton_drawable(skel_type, ts_index);
-        update_importance_visuals_edges(skel_type, ts_index);
+        update_importance_visuals_edges(skel_type, ts_index, show);
         return true;
     }
     // correspondence
     if (item_index == 5){
         if (!graph_drawable)
             create_skeleton_drawable(skel_type, ts_index);
-        update_correspondence_visuals(skel_type, ts_index);
+        update_correspondence_visuals(skel_type, ts_index, show);
         return true;
     }
     // main skeleton
@@ -266,24 +266,24 @@ bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int
     }
     // main skeleton vertices correspondence
     if (item_index == 7){
-        show_vertex_correspondence(skel_type, ts_index);
+        show_vertex_correspondence(skel_type, ts_index, show);
         return true;
     }
     // corresponding all-timestamp skeleton
     if (item_index == 8){
         if (!graph_drawable)
             create_skeleton_drawable(skel_type, ts_index);
-        show_edge_correspondence(skel_type, ts_index);
+        show_edge_correspondence(skel_type, ts_index, show);
         return true;
     }
     // bifurcation points
     if (item_index == 9){
-        show_bifur(skel_type, ts_index);
+        show_bifur(skel_type, ts_index, show);
         return true;
     }
     // lobe clusters
     if (item_index == 10){
-        show_lobes(skel_type, ts_index);
+        show_lobes(skel_type, ts_index, show);
         return true;
     }
     // lobe meshes
@@ -309,7 +309,7 @@ bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int
     if (item_index == 13){
         if (!graph_drawable)
             create_skeleton_drawable(skel_type, ts_index);
-        show_skeleton_distance(skel_type, ts_index);
+        show_skeleton_distance(skel_type, ts_index, show);
     }
     // branches mesh
     if (item_index == 14){
@@ -685,8 +685,8 @@ void GrowthViewer::draw() const {
                     for (auto d : m->renderer()->points_drawables()) {
                         if (d->is_visible()) {
                             program->set_uniform("lighting", d->normal_buffer());
-                            program->set_uniform("per_vertex_color", d->renderer()->per_vertex_color() && d->color_buffer());
-                            program->set_uniform("default_color", d->default_color());
+                            program->set_uniform("per_vertex_color", d->color_buffer());
+                            program->set_uniform("default_color", d->back_color());
                             d->draw(false);
                         }
                     }
@@ -708,7 +708,7 @@ void GrowthViewer::draw() const {
                 program->bind();
                 program->set_uniform("MVP", MVP);
                 program->set_uniform("per_vertex_color", false);
-                program->set_uniform("default_color", graph_drawable->default_color());
+                program->set_uniform("default_color", graph_drawable->back_color());
                 graph_drawable->draw(false);
                 program->release();
             }
@@ -814,12 +814,12 @@ bool GrowthViewer::create_normals_drawable(int ts_index)
 }
 
 
-bool GrowthViewer::update_importance_visuals_edges(SkeletonType type, int ts_index){
+bool GrowthViewer::update_importance_visuals_edges(SkeletonType type, int ts_index, bool show){
     LinesDrawable* graph_drawable = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
 
     // if importance visible, set colors back to black
-    if (graph_drawable->per_vertex_color()){
-        graph_drawable->set_per_vertex_color(false);
+    if (!show){
+        graph_drawable->set_uniform_coloring(graph_drawable->back_color());
     } else { // if importance not visible, color edges
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -853,10 +853,10 @@ bool GrowthViewer::update_importance_visuals_edges(SkeletonType type, int ts_ind
 }
 
 
-bool GrowthViewer::update_importance_visuals_vertices(SkeletonType type, int ts_index){
+bool GrowthViewer::update_importance_visuals_vertices(SkeletonType type, int ts_index, bool show){
     // if importance visible, set colors back to black
-    if (cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->per_vertex_color()){
-        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_per_vertex_color(false);
+    if (!show){
+        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_uniform_coloring(vec4(0, 0, 0, 1));
     } else { // if importance not visible, color vertices
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -889,14 +889,14 @@ bool GrowthViewer::update_importance_visuals_vertices(SkeletonType type, int ts_
 }
 
 
-bool GrowthViewer::update_correspondence_visuals(SkeletonType type, int ts_index){
+bool GrowthViewer::update_correspondence_visuals(SkeletonType type, int ts_index, bool show){
     // todo: fix bugs with other edge drawable methods
 
     LinesDrawable* graph_drawable = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
 
     // if importance visible, set colors back to black
-    if (graph_drawable->per_vertex_color()){
-        graph_drawable->set_per_vertex_color(false);
+    if (!show){
+        graph_drawable->set_uniform_coloring(vec4(0, 0, 0, 1));
     } else { // if importance not visible, color edges
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -1013,10 +1013,10 @@ bool GrowthViewer::create_lobe_skeleton_drawable(SkeletonType type, int ts_index
 }
 
 
-bool GrowthViewer::show_vertex_correspondence(SkeletonType type, int ts_index){
+bool GrowthViewer::show_vertex_correspondence(SkeletonType type, int ts_index, bool show){
     // if importance visible, set colors back to black
-    if (cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->per_vertex_color()){
-        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_per_vertex_color(false);
+    if (!show){
+        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_uniform_coloring(vec4(0, 0, 0, 1));
     } else { // if importance not visible, color vertices
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -1051,14 +1051,14 @@ bool GrowthViewer::show_vertex_correspondence(SkeletonType type, int ts_index){
 }
 
 
-bool GrowthViewer::show_edge_correspondence(SkeletonType type, int ts_index){
+bool GrowthViewer::show_edge_correspondence(SkeletonType type, int ts_index, bool show){
     // todo: fix bugs with other edge drawable methods
 
     LinesDrawable* graph_drawable = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
 
     // if importance visible, set colors back to black
-    if (graph_drawable->per_vertex_color()){
-        graph_drawable->set_per_vertex_color(false);
+    if (!show){
+        graph_drawable->set_uniform_coloring(vec4{0, 0, 0, 1});
     } else { // if importance not visible, color edges
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -1084,10 +1084,10 @@ bool GrowthViewer::show_edge_correspondence(SkeletonType type, int ts_index){
 }
 
 
-bool GrowthViewer::show_bifur(SkeletonType type, int ts_index){
+bool GrowthViewer::show_bifur(SkeletonType type, int ts_index, bool show){
     // if importance visible, set colors back to black
-    if (cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->per_vertex_color()){
-        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_per_vertex_color(false);
+    if (!show){
+        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_uniform_coloring(vec4(0, 0, 0, 1));
     } else { // if importance not visible, color vertices
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -1128,10 +1128,10 @@ bool GrowthViewer::show_bifur(SkeletonType type, int ts_index){
 }
 
 
-bool GrowthViewer::show_lobes(SkeletonType type, int ts_index){
+bool GrowthViewer::show_lobes(SkeletonType type, int ts_index, bool show){
     // if importance visible, set colors back to black
-    if (cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->per_vertex_color()){
-        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_per_vertex_color(false);
+    if (!show){
+        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_uniform_coloring(vec4(0, 0, 0, 1));
     } else { // if importance not visible, color vertices
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -1181,12 +1181,12 @@ bool GrowthViewer::show_lobes(SkeletonType type, int ts_index){
 }
 
 
-bool GrowthViewer::show_skeleton_distance(SkeletonType type, int ts_index){
+bool GrowthViewer::show_skeleton_distance(SkeletonType type, int ts_index, bool show){
     LinesDrawable* graph_drawable = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
 
     // if importance visible, set colors back to black
-    if (graph_drawable->per_vertex_color()){
-        graph_drawable->set_per_vertex_color(false);
+    if (!show){
+        graph_drawable->set_uniform_coloring(vec4(0, 0, 0, 1));
     } else { // if importance not visible, color edges
         const GraphGT* skeleton_draw = skeleton_ts(type, ts_index);
 
@@ -1357,7 +1357,7 @@ bool GrowthViewer::create_inter_skeleton_drawable(int item_index){
     LinesDrawable* graph_drawable = cloud_ts(item_index)->renderer()->get_lines_drawable("inter");
     if (!graph_drawable)
         graph_drawable = cloud_ts(item_index)->renderer()->add_lines_drawable("inter");
-    graph_drawable->set_per_vertex_color(true);
+//    graph_drawable->set_per_vertex_color(true);
     graph_drawable->update_color_buffer(colors_e);
     graph_drawable->update_vertex_buffer(graph_points);
 
@@ -1397,8 +1397,9 @@ bool GrowthViewer::open()
     const std::vector<std::string> filetypes = {"*.xyz"};
     const std::string& file_name = dialog::open("open files", std::string(""), filetypes);
 
-    if (Viewer::open()) {
+    if (!file_name.empty()) {
         set_title("AdTree - " + file_system::simple_name(cloud_ts(0)->name()));
+        add_model(file_name);
         fit_screen();
         return true;
     }
@@ -1417,9 +1418,10 @@ bool GrowthViewer::open_mesh()
 
     std::cout << "generated name" << std::endl;
 
-    if (Viewer::open()) {
+    if (!file_name.empty()) {
         std::cout << "opened" << std::endl;
         set_title("GTree branches");
+        add_model(file_name);
         fit_screen();
         return true;
     }
@@ -1439,8 +1441,9 @@ bool GrowthViewer::open_multiple()
 
     int count = 0;
     for (auto const& file_name : file_names) {
-        if (Viewer::open()) {
-            set_title("AdTree - " + file_system::simple_name(cloud_ts(count)->name()));
+        if (!file_name.empty()) {
+            set_title("GTree - " + file_system::simple_name(cloud_ts(count)->name()));
+            add_model(file_name);
             fit_screen();
             ++count;
         }
@@ -1464,8 +1467,9 @@ bool GrowthViewer::complete_multitemporal_import(std::vector<std::string> filena
 
     int count = 0;
     for (auto const& file_name : filenames) {
-        if (Viewer::open()) {
+        if (!file_name.empty()) {
             set_title("GTree - " + file_system::simple_name(cloud_ts(count)->name()));
+            add_model(file_name);
             fit_screen();
 
             PointCloud *cloud_curr = cloud_ts(count);
