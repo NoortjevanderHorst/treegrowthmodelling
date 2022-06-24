@@ -1,0 +1,731 @@
+{
+	"archive" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:X86",
+				"role" : "flags"
+			}
+		]
+	},
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/easy3d_algo.lib"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"_add_library",
+			"add_library",
+			"target_link_libraries",
+			"add_definitions",
+			"target_compile_definitions",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake",
+			"easy3d/algo/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 79,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 702,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 86,
+				"parent" : 0
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 36,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 95,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 83,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 84,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 89,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 94,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_BACKTRACE=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_BACKTRACE_SYMBOL=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_BFD=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_DW=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_DWARF=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_LIBUNWIND=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BACKWARD_HAS_UNWIND=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_DISABLE_DEFAULT_CRASH_HANDLING"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_FEATURE_ALL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_NO_DEFAULT_LOG_FILE"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_STL_LOGGING"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_THREAD_SAFE"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "ENV_32_BIT"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "HAS_BOOST"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "NOMINMAX"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 7,
+					"path" : "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree"
+				},
+				{
+					"backtrace" : 8,
+					"path" : "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/3rd_party/ransac"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/3rd_party/eigen"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "C:/src/vcpkg/installed/x86-windows/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "3rd_triangle::@33b00024efb88475b454"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_poisson::@db34a36cc71f1e4bb34d"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_tetgen::@a73fb924ca6ccf462f44"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_kdtree::@2215d0e0f577a695ed3e"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_ransac::@57eaf821139d621155ac"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_glutess::@772af51be14b41a29226"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_backward::@83b764c782bd8f1c1351"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "easy3d_util::@a5cd75459df24341c131"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "3rd_easyloggingpp::@3f64a3d41c9cceca5f34"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "easy3d_core::@cb35a92cddfea1372b37"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "easy3d_kdtree::@5b0ed2dddd1875435968"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "easy3d"
+	},
+	"id" : "easy3d_algo::@40215f147268e786d69c",
+	"name" : "easy3d_algo",
+	"nameOnDisk" : "easy3d_algo.lib",
+	"paths" : 
+	{
+		"build" : "easy3d/algo",
+		"source" : "easy3d/algo"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/delaunay.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/delaunay_2d.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/delaunay_3d.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/extrusion.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_geometry.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/gaussian_noise.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/point_cloud_normals.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/point_cloud_poisson_reconstruction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/point_cloud_ransac.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/point_cloud_simplification.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_components.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_curvature.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_enumerator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_factory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_fairing.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_features.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_geodesic.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_hole_filling.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_parameterization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_polygonization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_remeshing.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_sampler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_simplification.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_smoothing.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_stitching.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_subdivision.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_tetrahedralization.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_topology.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/surface_mesh_triangulation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/tessellator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/text_mesher.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "easy3d/algo/triangle_mesh_kdtree.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/delaunay.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/delaunay_2d.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/delaunay_3d.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/extrusion.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_geometry.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/gaussian_noise.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/point_cloud_normals.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/point_cloud_poisson_reconstruction.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/point_cloud_ransac.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/point_cloud_simplification.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_components.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_curvature.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_enumerator.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_factory.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_fairing.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_features.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_geodesic.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_hole_filling.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_parameterization.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_polygonization.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_remeshing.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_sampler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_simplification.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_smoothing.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_stitching.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_subdivision.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_tetrahedralization.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_topology.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/surface_mesh_triangulation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/tessellator.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/text_mesher.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "easy3d/algo/triangle_mesh_kdtree.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

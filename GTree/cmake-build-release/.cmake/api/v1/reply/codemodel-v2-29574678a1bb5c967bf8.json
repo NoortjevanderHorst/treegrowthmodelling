@@ -1,0 +1,999 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						19,
+						28
+					],
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "3rd_party",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					],
+					"jsonFile" : "directory-3rd_party-Release-c5a5201ee6026dcfec41.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "3rd_party"
+				},
+				{
+					"build" : "3rd_party/glew",
+					"jsonFile" : "directory-3rd_party.glew-Release-38f3dd21b9258f3be404.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "3rd_party/glew",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "3rd_party/glfw",
+					"childIndexes" : 
+					[
+						4
+					],
+					"jsonFile" : "directory-3rd_party.glfw-Release-e5b4b31e2f4169eb3d81.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "3rd_party/glfw"
+				},
+				{
+					"build" : "3rd_party/glfw/src",
+					"jsonFile" : "directory-3rd_party.glfw.src-Release-7a0af1aa392b1825b126.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "3rd_party/glfw/src",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "3rd_party/imgui",
+					"jsonFile" : "directory-3rd_party.imgui-Release-483d0eb0ae84fe7cb2c8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 3,
+					"source" : "3rd_party/imgui",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "3rd_party/rply",
+					"jsonFile" : "directory-3rd_party.rply-Release-52314918eeb03d873403.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 4,
+					"source" : "3rd_party/rply",
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"build" : "3rd_party/lastools",
+					"jsonFile" : "directory-3rd_party.lastools-Release-167bd7463ba8587e4d9c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 5,
+					"source" : "3rd_party/lastools",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "3rd_party/kdtree",
+					"jsonFile" : "directory-3rd_party.kdtree-Release-e361e69447df560d7543.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 6,
+					"source" : "3rd_party/kdtree",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "3rd_party/ransac",
+					"jsonFile" : "directory-3rd_party.ransac-Release-5ca0165f3a854c0e35b6.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 7,
+					"source" : "3rd_party/ransac",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "3rd_party/poisson",
+					"jsonFile" : "directory-3rd_party.poisson-Release-cb16b2610bcf184110c1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 8,
+					"source" : "3rd_party/poisson",
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"build" : "3rd_party/triangle",
+					"jsonFile" : "directory-3rd_party.triangle-Release-9aa4f3489cf9429c8db1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 9,
+					"source" : "3rd_party/triangle",
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"build" : "3rd_party/tetgen",
+					"jsonFile" : "directory-3rd_party.tetgen-Release-3740d418630044a9b72e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 10,
+					"source" : "3rd_party/tetgen",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "3rd_party/glutess",
+					"jsonFile" : "directory-3rd_party.glutess-Release-75ca2f932721c4127162.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 11,
+					"source" : "3rd_party/glutess",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "3rd_party/backward",
+					"jsonFile" : "directory-3rd_party.backward-Release-427dfa3027e1e320c9df.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 12,
+					"source" : "3rd_party/backward",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "3rd_party/easyloggingpp",
+					"jsonFile" : "directory-3rd_party.easyloggingpp-Release-7527113043c0ca35dab1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 13,
+					"source" : "3rd_party/easyloggingpp",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "3rd_party/kd_tree",
+					"jsonFile" : "directory-3rd_party.kd_tree-Release-efd815fec103a85ee431.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 14,
+					"source" : "3rd_party/kd_tree",
+					"targetIndexes" : 
+					[
+						23
+					]
+				},
+				{
+					"build" : "3rd_party/optimizer_lm",
+					"jsonFile" : "directory-3rd_party.optimizer_lm-Release-afc628d9afefddbbd458.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 15,
+					"source" : "3rd_party/optimizer_lm",
+					"targetIndexes" : 
+					[
+						24
+					]
+				},
+				{
+					"build" : "3rd_party/cminpack",
+					"jsonFile" : "directory-3rd_party.cminpack-Release-508adaf084c9f1726628.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 16,
+					"source" : "3rd_party/cminpack",
+					"targetIndexes" : 
+					[
+						14
+					]
+				},
+				{
+					"build" : "easy3d",
+					"childIndexes" : 
+					[
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27
+					],
+					"jsonFile" : "directory-easy3d-Release-1725198696594f4d80cf.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "easy3d"
+				},
+				{
+					"build" : "easy3d/util",
+					"jsonFile" : "directory-easy3d.util-Release-c56ae297e8319ee4fa17.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 17,
+					"source" : "easy3d/util",
+					"targetIndexes" : 
+					[
+						21
+					]
+				},
+				{
+					"build" : "easy3d/core",
+					"jsonFile" : "directory-easy3d.core-Release-2c41456c540c039ef378.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 18,
+					"source" : "easy3d/core",
+					"targetIndexes" : 
+					[
+						16
+					]
+				},
+				{
+					"build" : "easy3d/fileio",
+					"jsonFile" : "directory-easy3d.fileio-Release-b15e6ce9cb06219b5d93.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 19,
+					"source" : "easy3d/fileio",
+					"targetIndexes" : 
+					[
+						17
+					]
+				},
+				{
+					"build" : "easy3d/kdtree",
+					"jsonFile" : "directory-easy3d.kdtree-Release-746c6270f59eaa094766.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 20,
+					"source" : "easy3d/kdtree",
+					"targetIndexes" : 
+					[
+						19
+					]
+				},
+				{
+					"build" : "easy3d/algo",
+					"jsonFile" : "directory-easy3d.algo-Release-5f74d351fd647041c3e8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 21,
+					"source" : "easy3d/algo",
+					"targetIndexes" : 
+					[
+						15
+					]
+				},
+				{
+					"build" : "easy3d/renderer",
+					"jsonFile" : "directory-easy3d.renderer-Release-6edba92a367373622488.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 22,
+					"source" : "easy3d/renderer",
+					"targetIndexes" : 
+					[
+						20
+					]
+				},
+				{
+					"build" : "easy3d/gui",
+					"jsonFile" : "directory-easy3d.gui-Release-92899bed7b5e730e917f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 23,
+					"source" : "easy3d/gui",
+					"targetIndexes" : 
+					[
+						18
+					]
+				},
+				{
+					"build" : "easy3d/viewer",
+					"jsonFile" : "directory-easy3d.viewer-Release-d279bb8440a98cfe651e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 19,
+					"projectIndex" : 24,
+					"source" : "easy3d/viewer",
+					"targetIndexes" : 
+					[
+						22
+					]
+				},
+				{
+					"build" : "Interpolation",
+					"jsonFile" : "directory-Interpolation-Release-740f2479cca1745ebaab.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 25,
+					"source" : "Interpolation",
+					"targetIndexes" : 
+					[
+						13
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24,
+						25
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						19
+					],
+					"name" : "Easy3D"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "3rd_glew",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3,
+						4
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "3rd_imgui",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "3rd_rply",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "3rd_lastools",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						8
+					],
+					"name" : "3rd_kdtree",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						9
+					],
+					"name" : "3rd_ransac",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						10
+					],
+					"name" : "3rd_poisson",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						11
+					],
+					"name" : "3rd_triangle",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						12
+					],
+					"name" : "3rd_tetgen",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						13
+					],
+					"name" : "3rd_glutess",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						14
+					],
+					"name" : "3rd_backward",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						15
+					],
+					"name" : "Easyloggingpp",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						16
+					],
+					"name" : "kd_tree",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						23
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						17
+					],
+					"name" : "optimizer_lm",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						24
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						18
+					],
+					"name" : "cminpack",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						14
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						20
+					],
+					"name" : "easy3d_util",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						21
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						21
+					],
+					"name" : "easy3d_core",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						16
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						22
+					],
+					"name" : "easy3d_fileio",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						17
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						23
+					],
+					"name" : "easy3d_kdtree",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						19
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						24
+					],
+					"name" : "easy3d_algo",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						25
+					],
+					"name" : "easy3d_renderer",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						20
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						26
+					],
+					"name" : "easy3d_gui",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						18
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						27
+					],
+					"name" : "easy3d_viewer",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						22
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						28
+					],
+					"name" : "Interpolation",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						13
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 14,
+					"id" : "3rd_backward::@83b764c782bd8f1c1351",
+					"jsonFile" : "target-3rd_backward-Release-4e4bb777cb3c4d6c244c.json",
+					"name" : "3rd_backward",
+					"projectIndex" : 12
+				},
+				{
+					"directoryIndex" : 15,
+					"id" : "3rd_easyloggingpp::@3f64a3d41c9cceca5f34",
+					"jsonFile" : "target-3rd_easyloggingpp-Release-ddfb94362fa096f431bd.json",
+					"name" : "3rd_easyloggingpp",
+					"projectIndex" : 13
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "3rd_glew::@3782b4e7c4f9d2ba2c57",
+					"jsonFile" : "target-3rd_glew-Release-4dd048191d8ae2364d5e.json",
+					"name" : "3rd_glew",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "3rd_glfw::@82eb073f23ca4a565ec2",
+					"jsonFile" : "target-3rd_glfw-Release-38686d17d717748f4368.json",
+					"name" : "3rd_glfw",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 13,
+					"id" : "3rd_glutess::@772af51be14b41a29226",
+					"jsonFile" : "target-3rd_glutess-Release-4a546ed791dd5063ebb6.json",
+					"name" : "3rd_glutess",
+					"projectIndex" : 11
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "3rd_imgui::@1d0c053cdb0609b0c84b",
+					"jsonFile" : "target-3rd_imgui-Release-90a599cfaa19c5249466.json",
+					"name" : "3rd_imgui",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "3rd_kdtree::@2215d0e0f577a695ed3e",
+					"jsonFile" : "target-3rd_kdtree-Release-814f961e3a6d4b6646a2.json",
+					"name" : "3rd_kdtree",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "3rd_lastools::@f4e1a4d0ffccdcab7577",
+					"jsonFile" : "target-3rd_lastools-Release-642742134c6e39dbcdfd.json",
+					"name" : "3rd_lastools",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "3rd_poisson::@db34a36cc71f1e4bb34d",
+					"jsonFile" : "target-3rd_poisson-Release-bf0b504638748148b395.json",
+					"name" : "3rd_poisson",
+					"projectIndex" : 8
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "3rd_ransac::@57eaf821139d621155ac",
+					"jsonFile" : "target-3rd_ransac-Release-7dcb7fbbab41097f372a.json",
+					"name" : "3rd_ransac",
+					"projectIndex" : 7
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "3rd_rply::@1619e70c58d47ffe35fe",
+					"jsonFile" : "target-3rd_rply-Release-f5f03050c425f0eea5ae.json",
+					"name" : "3rd_rply",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 12,
+					"id" : "3rd_tetgen::@a73fb924ca6ccf462f44",
+					"jsonFile" : "target-3rd_tetgen-Release-d19ad10e5df6dc505ca6.json",
+					"name" : "3rd_tetgen",
+					"projectIndex" : 10
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "3rd_triangle::@33b00024efb88475b454",
+					"jsonFile" : "target-3rd_triangle-Release-6cecd7c604cca5cd8515.json",
+					"name" : "3rd_triangle",
+					"projectIndex" : 9
+				},
+				{
+					"directoryIndex" : 28,
+					"id" : "Interpolation::@64be3f0be1f77212fc70",
+					"jsonFile" : "target-Interpolation-Release-1e741dfa1005d7547533.json",
+					"name" : "Interpolation",
+					"projectIndex" : 25
+				},
+				{
+					"directoryIndex" : 18,
+					"id" : "cminpack::@e3843e3c45493f70bc82",
+					"jsonFile" : "target-cminpack-Release-934c79e7bc0c07dcddf6.json",
+					"name" : "cminpack",
+					"projectIndex" : 16
+				},
+				{
+					"directoryIndex" : 24,
+					"id" : "easy3d_algo::@40215f147268e786d69c",
+					"jsonFile" : "target-easy3d_algo-Release-40e245c7e89aa7a56427.json",
+					"name" : "easy3d_algo",
+					"projectIndex" : 21
+				},
+				{
+					"directoryIndex" : 21,
+					"id" : "easy3d_core::@cb35a92cddfea1372b37",
+					"jsonFile" : "target-easy3d_core-Release-4966c82f83dfec45867d.json",
+					"name" : "easy3d_core",
+					"projectIndex" : 18
+				},
+				{
+					"directoryIndex" : 22,
+					"id" : "easy3d_fileio::@1ac0250c1f979f6df208",
+					"jsonFile" : "target-easy3d_fileio-Release-9415df62e62d8eab70cd.json",
+					"name" : "easy3d_fileio",
+					"projectIndex" : 19
+				},
+				{
+					"directoryIndex" : 26,
+					"id" : "easy3d_gui::@a0d227e84eec4aea5440",
+					"jsonFile" : "target-easy3d_gui-Release-b05189ee6d9c923c5919.json",
+					"name" : "easy3d_gui",
+					"projectIndex" : 23
+				},
+				{
+					"directoryIndex" : 23,
+					"id" : "easy3d_kdtree::@5b0ed2dddd1875435968",
+					"jsonFile" : "target-easy3d_kdtree-Release-cfb9780d70c673c99db1.json",
+					"name" : "easy3d_kdtree",
+					"projectIndex" : 20
+				},
+				{
+					"directoryIndex" : 25,
+					"id" : "easy3d_renderer::@a13ef951aceccfecc7d1",
+					"jsonFile" : "target-easy3d_renderer-Release-2d464d2145ddd5d68a7a.json",
+					"name" : "easy3d_renderer",
+					"projectIndex" : 22
+				},
+				{
+					"directoryIndex" : 20,
+					"id" : "easy3d_util::@a5cd75459df24341c131",
+					"jsonFile" : "target-easy3d_util-Release-212c25e08b6e082bce46.json",
+					"name" : "easy3d_util",
+					"projectIndex" : 17
+				},
+				{
+					"directoryIndex" : 27,
+					"id" : "easy3d_viewer::@e94df83b7addc850682d",
+					"jsonFile" : "target-easy3d_viewer-Release-d5d15163c3289ce00918.json",
+					"name" : "easy3d_viewer",
+					"projectIndex" : 24
+				},
+				{
+					"directoryIndex" : 16,
+					"id" : "kd_tree::@37d01bc194f3417ce791",
+					"jsonFile" : "target-kd_tree-Release-c86f9c5de556b6358e49.json",
+					"name" : "kd_tree",
+					"projectIndex" : 14
+				},
+				{
+					"directoryIndex" : 17,
+					"id" : "optimizer_lm::@c2d4901486361383f7a7",
+					"jsonFile" : "target-optimizer_lm-Release-ff646c5f43785a6a3796.json",
+					"name" : "optimizer_lm",
+					"projectIndex" : 15
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release",
+		"source" : "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

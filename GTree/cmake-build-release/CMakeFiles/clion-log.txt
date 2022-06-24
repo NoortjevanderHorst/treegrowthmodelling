@@ -1,0 +1,20 @@
+"C:\Program Files\JetBrains\CLion 2021.3.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2021.3.2/bin/ninja/win/ninja.exe" -DCMAKE_TOOLCHAIN_FILE=C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja C:\Users\noort\Documents\1\TU\year_5\GEO2020_thesis\Code\Thesis_treegrowth\treegrowthmodelling\GTree
+-- Easy3D: I am working on a 32-bit Windows
+-- OpenGL libraries: opengl32;glu32
+-- Including Win32 support
+-- Could NOT find OpenMP (missing: OpenMP_C_INCLUDE_DIRS) 
+-- Could NOT find OpenMP (missing: OpenMP_C_LIBRARIES) 
+-- Could NOT find OpenMP (missing: OpenMP_CXX_INCLUDE_DIRS) 
+-- Could NOT find OpenMP (missing: OpenMP_CXX_LIBRARIES) 
+-- Setting C++11
+-- Adding target: easy3d::util (easy3d_util)
+-- Adding target: easy3d::core (easy3d_core)
+-- Adding target: easy3d::fileio (easy3d_fileio)
+-- Adding target: easy3d::kdtree (easy3d_kdtree)
+-- Adding target: easy3d::algo (easy3d_algo)
+-- Adding target: easy3d::renderer (easy3d_renderer)
+-- Adding target: easy3d::gui (easy3d_gui)
+-- Adding target: easy3d::viewer (easy3d_viewer)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release
