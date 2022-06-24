@@ -37,6 +37,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/3rd_party/cmake_install.cmake")
   include("C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/easy3d/cmake_install.cmake")
   include("C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/Interpolation/cmake_install.cmake")
+  include("C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/TreeGrowthReconstruction/cmake_install.cmake")
 
 endif()
 

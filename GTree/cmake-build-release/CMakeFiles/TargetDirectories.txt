@@ -81,3 +81,6 @@ C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treeg
 C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/Interpolation/CMakeFiles/rebuild_cache.dir
 C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/Interpolation/CMakeFiles/Interpolation.dir
 C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/Interpolation/CMakeFiles/edit_cache.dir
+C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/TreeGrowthReconstruction/CMakeFiles/TreeGrowthReconstruction.dir
+C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/TreeGrowthReconstruction/CMakeFiles/edit_cache.dir
+C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/TreeGrowthReconstruction/CMakeFiles/rebuild_cache.dir

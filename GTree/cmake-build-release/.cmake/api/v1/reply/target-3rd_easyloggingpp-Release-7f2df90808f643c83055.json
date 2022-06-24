@@ -1,0 +1,146 @@
+{
+	"archive" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:X86",
+				"role" : "flags"
+			}
+		]
+	},
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/3rd_easyloggingpp.lib"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"_add_library",
+			"add_library",
+			"target_compile_definitions"
+		],
+		"files" : 
+		[
+			"C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake",
+			"3rd_party/easyloggingpp/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 32,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 702,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 37,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 60,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_DISABLE_DEFAULT_CRASH_HANDLING"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_FEATURE_ALL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_NO_DEFAULT_LOG_FILE"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_STL_LOGGING"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "ELPP_THREAD_SAFE"
+				},
+				{
+					"backtrace" : 4,
+					"define" : "NOMINMAX"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"folder" : 
+	{
+		"name" : "3rd_party"
+	},
+	"id" : "3rd_easyloggingpp::@3f64a3d41c9cceca5f34",
+	"name" : "3rd_easyloggingpp",
+	"nameOnDisk" : "3rd_easyloggingpp.lib",
+	"paths" : 
+	{
+		"build" : "3rd_party/easyloggingpp",
+		"source" : "3rd_party/easyloggingpp"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "3rd_party/easyloggingpp/src/easylogging++.cc",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

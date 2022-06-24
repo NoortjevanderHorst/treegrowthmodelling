@@ -122,8 +122,34 @@ BACKWARD_TESTS:BOOL=OFF
 //Build shared libraries
 BUILD_SHARED_LIBS:BOOL=OFF
 
+//Build the testing tree.
+BUILD_TESTING:BOOL=OFF
+
+//Activate the debug messages of the script FindBoost
+Boost_DEBUG:BOOL=OFF
+
 //Path to a file.
 Boost_INCLUDE_DIR:PATH=C:/src/vcpkg/installed/x86-windows/include
+
+//Link with static Boost libraries
+CGAL_Boost_USE_STATIC_LIBS:BOOL=ON
+
+//Display memory and real time usage at end of CTest test outputs
+CGAL_CTEST_DISPLAY_MEM_AND_TIME:BOOL=OFF
+
+//Activate the CGAL developers mode. See https://github.com/CGAL/cgal/wiki/CGAL_DEV_MODE
+CGAL_DEV_MODE:BOOL=OFF
+
+//The directory containing a CMake configuration file for CGAL.
+CGAL_DIR:PATH=C:/src/vcpkg/installed/x86-windows/lib/cgal
+
+//If set, the ctest command will not skip the tests of the draw
+// functions.
+CGAL_TEST_DRAW_FUNCTIONS:BOOL=OFF
+
+//Use CGAL with GMPXX: use C++ classes of GNU MP instead of CGAL
+// wrappers
+CGAL_WITH_GMPXX:BOOL=OFF
 
 //Path to a program.
 CMAKE_AR:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.28.29910/bin/Hostx86/x86/lib.exe
@@ -279,7 +305,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Easy3D
+CMAKE_PROJECT_NAME:STATIC=GTree
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=3.4.0
@@ -386,13 +412,13 @@ EASY3D_ENABLE_CGAL:BOOL=OFF
 EASY3D_ENABLE_QT:BOOL=OFF
 
 //Value Computed by CMake
-Easy3D_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release
+Easy3D_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/easy3d
 
 //Value Computed by CMake
-Easy3D_IS_TOP_LEVEL:STATIC=ON
+Easy3D_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-Easy3D_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree
+Easy3D_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/easy3d
 
 //Value Computed by CMake
 Easyloggingpp_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/3rd_party/easyloggingpp
@@ -402,6 +428,9 @@ Easyloggingpp_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 Easyloggingpp_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/3rd_party/easyloggingpp
+
+//git command line client
+GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
 //Value Computed by CMake
 GLFW_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/3rd_party/glfw
@@ -434,6 +463,29 @@ GLFW_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/
 //Force use of high-performance GPU on hybrid systems
 GLFW_USE_HYBRID_HPG:BOOL=OFF
 
+//The directory containing the GMPXX include files
+GMPXX_INCLUDE_DIR:PATH=C:/src/vcpkg/installed/x86-windows/include
+
+//Path to the GMPXX library
+GMPXX_LIBRARIES:FILEPATH=GMPXX_LIBRARIES-NOTFOUND
+
+//The directory containing the GMP header files
+GMP_INCLUDE_DIR:PATH=C:/src/vcpkg/installed/x86-windows/include
+
+//Path to the GMP library
+GMP_LIBRARIES:FILEPATH=C:/src/vcpkg/installed/x86-windows/lib/gmp.lib
+
+GMP_LIBRARIES_DIR:FILEPATH=C:/src/vcpkg/installed/x86-windows/lib
+
+//Value Computed by CMake
+GTree_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release
+
+//Value Computed by CMake
+GTree_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+GTree_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree
+
 //Value Computed by CMake
 Interpolation_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/Interpolation
 
@@ -442,6 +494,14 @@ Interpolation_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 Interpolation_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/Interpolation
+
+//The directory containing the MPFR header files
+MPFR_INCLUDE_DIR:PATH=C:/src/vcpkg/installed/x86-windows/include
+
+//Path to the MPFR library
+MPFR_LIBRARIES:FILEPATH=C:/src/vcpkg/installed/x86-windows/lib/mpfr.lib
+
+MPFR_LIBRARIES_DIR:FILEPATH=C:/src/vcpkg/installed/x86-windows/lib
 
 //OpenGL library for win32
 OPENGL_gl_LIBRARY:STRING=opengl32
@@ -484,6 +544,15 @@ STACK_WALKING_LIBUNWIND:BOOL=FALSE
 
 //Use compiler's unwind API
 STACK_WALKING_UNWIND:BOOL=TRUE
+
+//Value Computed by CMake
+TreeGrowthReconstruction_BINARY_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/cmake-build-release/TreeGrowthReconstruction
+
+//Value Computed by CMake
+TreeGrowthReconstruction_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+TreeGrowthReconstruction_SOURCE_DIR:STATIC=C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/TreeGrowthReconstruction
 
 //Use MSVC runtime library DLL
 USE_MSVC_RUNTIME_LIBRARY_DLL:BOOL=ON
@@ -643,8 +712,16 @@ BACKWARD_LIBRARIES-ADVANCED:INTERNAL=1
 BACKWARD_LIBRARIES:INTERNAL=
 //ADVANCED property for variable: BUILD_SHARED_LIBS
 BUILD_SHARED_LIBS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Boost_DEBUG
+Boost_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_INCLUDE_DIR
 Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CGAL_Boost_USE_STATIC_LIBS
+CGAL_Boost_USE_STATIC_LIBS-ADVANCED:INTERNAL=1
+//CGAL library is configured to use GMP
+CGAL_USE_GMP:INTERNAL=TRUE
+//CGAL library is configured to use MPFR
+CGAL_USE_MPFR:INTERNAL=TRUE
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //This is the directory where this CMakeCache.txt was created
@@ -765,7 +842,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=29
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=30
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //noop for ranlib
@@ -811,12 +888,18 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_TOOLCHAIN_FILE
 CMAKE_TOOLCHAIN_FILE-ADVANCED:INTERNAL=1
+//Variable hidden from user
+CMAKE_UNAME:INTERNAL=CMAKE_UNAME-NOTFOUND
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Backward
 FIND_PACKAGE_MESSAGE_DETAILS_Backward:INTERNAL=[C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth/treegrowthmodelling/GTree/3rd_party/backward][v()]
 //Details about finding Boost
-FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[C:/src/vcpkg/installed/x86-windows/include][c ][v1.75.0()]
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[C:/src/vcpkg/installed/x86-windows/include][c ][v1.75.0(1.48)]
+//Details about finding GMP
+FIND_PACKAGE_MESSAGE_DETAILS_GMP:INTERNAL=[C:/src/vcpkg/installed/x86-windows/lib/gmp.lib][C:/src/vcpkg/installed/x86-windows/include][v()]
+//Details about finding MPFR
+FIND_PACKAGE_MESSAGE_DETAILS_MPFR:INTERNAL=[C:/src/vcpkg/installed/x86-windows/lib/mpfr.lib][C:/src/vcpkg/installed/x86-windows/include][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][c ][v()]
 //Details about finding OpenMP
@@ -871,6 +954,8 @@ Z_VCPKG_CHECK_MANIFEST_MODE:INTERNAL=OFF
 Z_VCPKG_POWERSHELL_PATH:INTERNAL=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
 //Vcpkg root directory
 Z_VCPKG_ROOT_DIR:INTERNAL=C:/src/vcpkg
+//Last used Boost_ADDITIONAL_VERSIONS value.
+_Boost_ADDITIONAL_VERSIONS_LAST:INTERNAL=1.89.1;1.89.0;1.89;1.88.1;1.88.0;1.88;1.87.1;1.87.0;1.87;1.86.1;1.86.0;1.86;1.85.1;1.85.0;1.85;1.84.1;1.84.0;1.84;1.83.1;1.83.0;1.83;1.82.1;1.82.0;1.82;1.81.1;1.81.0;1.81;1.80.1;1.80.0;1.80;1.79.1;1.79.0;1.79;1.78.1;1.78.0;1.78;1.77.1;1.77.0;1.77;1.76.1;1.76.0;1.76;1.75.1;1.75.0;1.75;1.74.1;1.74.0;1.74;1.73.1;1.73.0;1.73;1.72.1;1.72.0;1.72;1.71.1;1.71.0;1.71;1.70.1;1.70.0;1.70;1.69.1;1.69.0;1.69;1.68.1;1.68.0;1.68;1.67.1;1.67.0;1.67;1.66.1;1.66.0;1.66;1.65.1;1.65.0;1.65;1.64.1;1.64.0;1.64;1.63.1;1.63.0;1.63;1.62.1;1.62.0;1.62;1.61.1;1.61.0;1.61;1.60.1;1.60.0;1.60;1.59.1;1.59.0;1.59;1.58.1;1.58.0;1.58;1.57.1;1.57.0;1.57
 //Last used Boost_COMPILER value.
 _Boost_COMPILER_LAST:INTERNAL=-vc140
 //Components requested for this build tree.

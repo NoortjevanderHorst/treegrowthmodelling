@@ -64,4 +64,4 @@ add_library(${PROJECT_NAME} STATIC
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rd_party")
 
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${EASY3D_cminpack_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${GTREE_cminpack_INCLUDE_DIR})

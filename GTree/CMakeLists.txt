@@ -5,36 +5,9 @@ if (APPLE)
     message(STATUS "Minimum OS X deployment version: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
 endif ()
 
-################################################################################
-
-project(Easy3D)
-
-set(EASY3D_MAJOR_VERSION 2)
-set(EASY3D_MINOR_VERSION 4)
-set(EASY3D_PATCH_VERSION 8)
-set(EASY3D_VERSION "${EASY3D_MAJOR_VERSION}.${EASY3D_MINOR_VERSION}.${EASY3D_PATCH_VERSION}")
-
-################################################################################
-
-# Discourage users to build Easy3D directly in its root directory
-if (${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-    if (NOT SAME_BUILD_AND_SOURCE_FOLDER_WARNING_ALREADY_ISSUED)
-        message(WARNING "It is NOT advised to build Easy3D directly in its root directory!")
-        set(SAME_BUILD_AND_SOURCE_FOLDER_WARNING_ALREADY_ISSUED TRUE)
-    endif ()
-endif ()
-
-################################################################################
-
-#math(EXPR EASY3D_OS_BITS "8 * ${CMAKE_SIZEOF_VOID_P}")
-#message(STATUS "Easy3d: I'am woking on ${EASY3D_OS_BITS}-bit ${CMAKE_SYSTEM_NAME}")
-if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message(STATUS "Easy3D: I am working on a 64-bit ${CMAKE_SYSTEM_NAME}")
-    add_definitions(-DENV_64_BIT)
-else ()
-    message(STATUS "Easy3D: I am working on a 32-bit ${CMAKE_SYSTEM_NAME}")
-    add_definitions(-DENV_32_BIT)
-endif ()
+get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+project(${PROJECT_NAME})
+#project(Easy3D)
 
 ################################################################################
 
@@ -45,11 +18,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 ################################################################################
 
 # Detects whether this is a top-level project
-if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(EASY3D_TOPLEVEL_PROJECT ON)
-else ()
-    set(EASY3D_TOPLEVEL_PROJECT OFF)
-endif ()
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(GTREE_TOPLEVEL_PROJECT ON)
+else()
+    set(GTREE_TOPLEVEL_PROJECT OFF)
+endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -57,16 +30,28 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 ################################################################################
 
 ### Configuration
-set(EASY3D_ROOT ${CMAKE_CURRENT_LIST_DIR})
-set(EASY3D_THIRD_PARTY ${EASY3D_ROOT}/3rd_party)
+set(GTREE_ROOT ${CMAKE_CURRENT_LIST_DIR})
+set(GTREE_THIRD_PARTY ${GTREE_ROOT}/3rd_party)
 
-set(EASY3D_INCLUDE_DIR ${EASY3D_ROOT})
-set(EASY3D_SOURCE_DIR ${EASY3D_ROOT})
+set(EASY3D_INCLUDE_DIR ${GTREE_ROOT})
+set(EASY3D_SOURCE_DIR ${GTREE_ROOT})
 set(EASY3D_BINARY_DIR ${CMAKE_BINARY_DIR})
 
+set(GTREE_INCLUDE_DIR ${GTREE_ROOT})
+set(GTREE_SOURCE_DIR ${GTREE_ROOT})
+set(GTREE_BINARY_DIR ${CMAKE_BINARY_DIR})
+
 ### additional library not part of easy3d
-set(EASY3D_cminpack_INCLUDE_DIR "${EASY3D_THIRD_PARTY}/cminpack")
-set(EASY3D_kd_INCLUDE_DIR "${EASY3D_THIRD_PARTY}/kd_tree")
+set(GTREE_cminpack_INCLUDE_DIR "${GTREE_THIRD_PARTY}/cminpack")
+set(GTREE_kd_INCLUDE_DIR "${GTREE_THIRD_PARTY}/kd_tree")
+
+### libraries for growth interpolation
+set(GTREE_glew_INCLUDE_DIR "${GTREE_EXTERNAL}/glew/include")
+set(GTREE_glfw_INCLUDE_DIR "${GTREE_EXTERNAL}/glfw/include")
+set(GTREE_imgui_INCLUDE_DIR "${GTREE_EXTERNAL}/imgui")
+set(GTREE_tetgen_INCLUDE_DIR "${GTREE_EXTERNAL}/tetgen")
+set(GTREE_easy3d_INCLUDE_DIR "${GTREE_EXTERNAL}" "${GTREE_ROOT}")
+set(GTREE_lm_INCLUDE_DIR "${GTREE_EXTERNAL}/optimizer_lm")
 
 ### conditionally compile certain modules depending on libraries found on the system
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
@@ -84,6 +69,8 @@ add_subdirectory(3rd_party)
 add_subdirectory(easy3d)
 
 add_subdirectory(Interpolation)
+
+add_subdirectory(TreeGrowthReconstruction)
 
 ################################################################################
 

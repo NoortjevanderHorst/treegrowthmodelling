@@ -17,7 +17,7 @@ add_executable(${PROJECT_NAME}
         cylinder.h
         )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "tutorials")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Interpolation")
 
 target_link_libraries(${PROJECT_NAME} 3rd_imgui easy3d::core easy3d::renderer easy3d::viewer easy3d::util cminpack optimizer_lm kd_tree)
 
