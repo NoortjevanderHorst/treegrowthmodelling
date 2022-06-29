@@ -134,7 +134,7 @@ bool GSkeleton::build_delaunay(){
     // --edges
     tetgenio tet_in, tet_out;
     tet_in.numberofpoints = nr_points;
-    tet_in.pointlist = new REAL[tet_in.numberofpoints * 3];
+    tet_in.pointlist = new double[tet_in.numberofpoints * 3];
     int count = 0;
     for (auto pc_pt : pc_points_) {
         tet_in.pointlist[count * 3 + 0] = pc_pt.x;
@@ -143,13 +143,10 @@ bool GSkeleton::build_delaunay(){
         ++count;
     }
 
-    std::cout << "- tetrahedralizing points: " << nr_points << std::endl;
-
     // --triangulation
-    const std::string str("Q");
-    tetrahedralize(reinterpret_cast<tetgenbehavior *>(const_cast<char *>(str.c_str())), &tet_in, &tet_out);
-//    tetrahedralize(const_cast<char *>(str.c_str()), &tet_in, &tet_out);
-    std::cout << "- done, making edges..." << std::endl;
+    tetgenbehavior tetgen_args_;
+    tetgen_args_.parse_commandline((char *) ("Qn"));
+    ::tetrahedralize(&tetgen_args_, &tet_in, &tet_out);
 
     for (long nTet = 0; nTet < tet_out.numberoftetrahedra; nTet++) {
         long tet_first = nTet * tet_out.numberofcorners;
@@ -165,8 +162,6 @@ bool GSkeleton::build_delaunay(){
             }
         }
     }
-
-    std::cout << "- edges made." << std::endl;
 
     return true;
 }
@@ -413,7 +408,7 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
     int nr_points = num_vertices(delaunay_constrained);
     tetgenio tet_in, tet_out;
     tet_in.numberofpoints = nr_points;
-    tet_in.pointlist = new REAL[tet_in.numberofpoints * 3];
+    tet_in.pointlist = new double[tet_in.numberofpoints * 3];
     tet_in.numberofedges = nr_main_edges;
     tet_in.edgelist = new int[tet_in.numberofedges * 2];
 
@@ -443,12 +438,14 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
 
     int main_ct_2 = 0;
     // delaunay triangulation
-    const std::string str("pYcQ");
     // p = input PLC,
     // Y = keep original input lines,
     // c = convex (will delete all tetrahedra as outer if not set),
     // Q = quiet
-    tetrahedralize(reinterpret_cast<tetgenbehavior *>(const_cast<char *>(str.c_str())), &tet_in, &tet_out);
+    tetgenbehavior tetgen_args_;
+    tetgen_args_.parse_commandline((char *) ("pYcQ"));
+    ::tetrahedralize(&tetgen_args_, &tet_in, &tet_out);
+
     for (long nTet = 0; nTet < tet_out.numberoftetrahedra; nTet++) {
         long tet_first = nTet * tet_out.numberofcorners;
         for (long i = tet_first; i < tet_first + tet_out.numberofcorners; i++) {
