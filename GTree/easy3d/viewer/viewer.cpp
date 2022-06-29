@@ -1578,14 +1578,14 @@ namespace easy3d {
 
     void Viewer::post_draw() {
         // draw the Easy3D logo and GPU time
-        if (texter_ && texter_->num_fonts() >=2) {
+        /*if (texter_ && texter_->num_fonts() >=2) {
             const float font_size = 15.0f;
             const float offset = 20.0f * dpi_scaling();
             texter_->draw("Easy3D", offset, offset, font_size, 0);
 
             if (show_frame_rate_)
                 texter_->draw(gpu_time_, offset, 50.0f * dpi_scaling(), 16, 1);
-        }
+        }*/
 
         // shown only when it is not animating
         if (show_camera_path_ && !kfi_->is_interpolation_started()) {

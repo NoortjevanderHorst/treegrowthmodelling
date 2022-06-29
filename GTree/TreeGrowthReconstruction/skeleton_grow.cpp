@@ -36,20 +36,28 @@ GSkeleton::~GSkeleton() {
 
 /// --- CONTROL
 bool GSkeleton::reconstruct_skeleton(const PointCloud* cloud, SurfaceMesh* mesh_result) {
+    std::cout << "loading points" << std::endl;
+
     if (!load_points(cloud)) {
         std::cerr << "ERROR: failed initial point registration step" << std::endl;
         return false;
     }
+
+    std::cout << "building delaunay" << std::endl;
 
     if (!build_delaunay()) {
         std::cerr << "ERROR: failed Delaunay triangulation step" << std::endl;
         return false;
     }
 
+    std::cout << "building mst" << std::endl;
+
     if (!build_mst()) {
         std::cerr << "ERROR: failed initial Minimum Spanning Tree step" << std::endl;
         return false;
     }
+
+    std::cout << "simplifying" << std::endl;
 
     if(!build_simplified()){
         std::cout << "ERROR: failed MST simplification step" << std::endl;
@@ -135,10 +143,14 @@ bool GSkeleton::build_delaunay(){
         ++count;
     }
 
+    std::cout << "- tetrahedralizing points: " << nr_points << std::endl;
+
     // --triangulation
     const std::string str("Q");
     tetrahedralize(reinterpret_cast<tetgenbehavior *>(const_cast<char *>(str.c_str())), &tet_in, &tet_out);
 //    tetrahedralize(const_cast<char *>(str.c_str()), &tet_in, &tet_out);
+    std::cout << "- done, making edges..." << std::endl;
+
     for (long nTet = 0; nTet < tet_out.numberoftetrahedra; nTet++) {
         long tet_first = nTet * tet_out.numberofcorners;
         for (long i = tet_first; i < tet_first + tet_out.numberofcorners; i++) {
@@ -153,6 +165,8 @@ bool GSkeleton::build_delaunay(){
             }
         }
     }
+
+    std::cout << "- edges made." << std::endl;
 
     return true;
 }

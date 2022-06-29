@@ -13,6 +13,7 @@
 #include <easy3d/util/dialogs.h>
 #include <easy3d/util/file_system.h>
 #include <easy3d/fileio/surface_mesh_io.h>
+#include <easy3d/fileio/translator.h>
 
 #include <easy3d/core/types.h>
 #include <easy3d/core/surface_mesh.h>

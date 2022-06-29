@@ -1398,8 +1398,8 @@ bool GrowthViewer::open()
     const std::string& file_name = dialog::open("open files", std::string(""), filetypes);
 
     if (!file_name.empty()) {
-        set_title("AdTree - " + file_system::simple_name(cloud_ts(0)->name()));
         add_model(file_name);
+        set_title("GTree - " + file_system::simple_name(cloud_ts(0)->name()));
         fit_screen();
         return true;
     }
@@ -1465,16 +1465,21 @@ bool GrowthViewer::complete_multitemporal_import(std::vector<std::string> filena
         delete m;
     models_.clear();
 
+    // set to translate all imported models with first point (default is no translation)
+    Translator::instance()->set_status(Translator::TRANSLATE_USE_FIRST_POINT);
+
     int count = 0;
     for (auto const& file_name : filenames) {
         if (!file_name.empty()) {
-            set_title("GTree - " + file_system::simple_name(cloud_ts(count)->name()));
             add_model(file_name);
+            set_title("GTree - " + file_system::simple_name(cloud_ts(count)->name()));
             fit_screen();
 
             PointCloud *cloud_curr = cloud_ts(count);
+
             PointCloud::ModelProperty<Vec<3, double> > offset_first = cloud_ts(0)->get_model_property<dvec3>("translation");
             PointCloud::ModelProperty<Vec<3, double> > offset_curr = cloud_curr->get_model_property<dvec3>("translation");
+
             if (count > 0) {
                 Vec<3, double> offset_relative = (-offset_first[0]) - (-offset_curr[0]);
 
@@ -2646,23 +2651,37 @@ bool GrowthViewer::reconstruct_all(){
         return false;
     }
 
+    std::cout << "a" << std::endl;
+
     // reconstruction
     reconstruct_multitemporal();
+
+    std::cout << "b" << std::endl;
 
     // merged structure
     add_merged_cloud();
 
+    std::cout << "c" << std::endl;
+
     // correspondence
     model_correspondence();
+
+    std::cout << "d" << std::endl;
 
     // growth
     model_growth();
 
+    std::cout << "e" << std::endl;
+
     // branches
     reconstruct_geometry();
 
+    std::cout << "f" << std::endl;
+
     // interpolation
     model_interpolation();
+    std::cout << "g" << std::endl;
+
 
     return true;
 }
