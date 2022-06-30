@@ -31,23 +31,11 @@
 #include <easy3d/renderer/setting.h>
 #include <easy3d/renderer/soft_shadow.h>
 
-
-//#include <easy3d/viewer/drawable.h>
-//#include <easy3d/viewer/camera.h>
-//#include <easy3d/viewer/soft_shadow.h>
-//
-//#include <easy3d/viewer/shader_program.h>
-//#include <easy3d/viewer/shader_manager.h>
-//#include <easy3d/viewer/setting.h>
-//#include <easy3d/algo/remove_duplication.h>
-
 #include <vector>
 #include <chrono>
 
 #include "g_tree.h"
 
-
-//#include <AdTree/skeleton.h>
 
 // The original easy3d viewer enables multiple models. In TreeViewer, we allow only three:
 //    - model #1: the point cloud
@@ -124,7 +112,6 @@ protected:
 
     bool create_inter_skeleton_drawable(int item_index);
 
-//    easy3d::PointCloud*  cloud() const;
     easy3d::SurfaceMesh* branches() const;
     easy3d::SurfaceMesh* leaves() const;
     // timestamp model access
@@ -134,7 +121,7 @@ protected:
     easy3d::SurfaceMesh* branches_ts(int time_index, int type_idx) const;
 
     // timestamp visualisation method
-    bool ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type) override;
+    bool ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type, std::vector<ImVec4> colors) override;
     bool ts_change_colors(int ts_index, int item_index, ImVec4 color) override;
     bool inter_visualisation(int item_index, bool show) override;
 

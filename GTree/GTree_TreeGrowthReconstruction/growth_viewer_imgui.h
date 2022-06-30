@@ -78,7 +78,7 @@ namespace easy3d {
             ST_TS_MAIN
         };
 
-        virtual bool ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type) = 0;
+        virtual bool ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type, std::vector<ImVec4> colors) = 0;
         virtual bool ts_change_colors(int ts_index, int item_index, ImVec4 color) = 0;
         virtual bool inter_visualisation(int item_index, bool show) = 0;
 

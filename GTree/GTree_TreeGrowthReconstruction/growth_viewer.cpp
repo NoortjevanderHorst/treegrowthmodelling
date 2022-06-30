@@ -190,7 +190,7 @@ SurfaceMesh* GrowthViewer::branches_ts(int time_index, int type_idx) const {
 
 
 // method replacements/alternatives for key presses
-bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type){
+bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type, std::vector<ImVec4> colors){
     // convert skeleton type int index to string name
     SkeletonType skel_type = static_cast<SkeletonType>(skeleton_type);
 
@@ -205,6 +205,8 @@ bool GrowthViewer::ts_visualisation(int ts_index, int item_index, bool show, int
     // points
     if (item_index == 0){
         cloud_ts(ts_index)->renderer()->set_visible(show);
+        vec4 vcolor = {colors[0].x, colors[0].y, colors[0].z, colors[0].w};
+        cloud_ts(ts_index)->renderer()->get_points_drawable("vertices")->set_uniform_coloring(vcolor);
         return true;
     }
 
@@ -686,7 +688,7 @@ void GrowthViewer::draw() const {
                         if (d->is_visible()) {
                             program->set_uniform("lighting", d->normal_buffer());
                             program->set_uniform("per_vertex_color", d->color_buffer());
-                            program->set_uniform("default_color", d->back_color());
+                            program->set_uniform("default_color", vec4(0.0f, 0.0f, 0.0f, 1.0f));
                             d->draw(false);
                         }
                     }
@@ -708,7 +710,7 @@ void GrowthViewer::draw() const {
                 program->bind();
                 program->set_uniform("MVP", MVP);
                 program->set_uniform("per_vertex_color", false);
-                program->set_uniform("default_color", graph_drawable->back_color());
+                program->set_uniform("default_color", vec4(0.0f, 0.0f, 0.0f, 1.0f));
                 graph_drawable->draw(false);
                 program->release();
             }

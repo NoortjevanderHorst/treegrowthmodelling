@@ -367,8 +367,9 @@ namespace easy3d {
             }
             if (colors.size() < nr_timestamps){
                 while (colors.size() < nr_timestamps){
-                    static ImVec4 color_init = {1.0f, 1.0f, 1.0f, 1.0f};
-                    colors.push_back({color_init, color_init});
+                    static ImVec4 color_default_v = {0.3f, 0.67f, 1.0f, 1.0f};
+                    static ImVec4 color_default_e = {0.0f, 0.3f, 0.56f, 1.0f};
+                    colors.push_back({color_default_v, color_default_e});
                 }
             }
             if (skeleton_types.size() < nr_timestamps){
@@ -431,7 +432,7 @@ namespace easy3d {
                         for (int j = 0; j < checkbox_map[i].size(); ++j) {
                             bool changed = ImGui::Checkbox(checkbox_map[i][j].first.c_str(),&checkbox_map[i][j].second);
                             if (changed) {
-                                ts_visualisation(i, j, checkbox_map[i][j].second, skeleton_types[i]);
+                                ts_visualisation(i, j, checkbox_map[i][j].second, skeleton_types[i], colors[i]);
                             }
                         }
 
