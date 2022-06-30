@@ -30,17 +30,11 @@ GrowthViewer::GrowthViewer()
 GrowthViewer::~GrowthViewer() {}
 
 
-/// -- ACCESS --
-PointCloud* GrowthViewer::cloud_ts(int time_index) const {
-    // "add_model()" pushes to back of "models_"
-    // adds pc or mesh (only mesh if no pc)
-    // for (auto m : models_) { if (model == m) {} } : check if exists possible
-    // open() adds points from .xyz as pointcloud models
-    // --> access function needs to know:
-    //  - were any other models added than the ones from open?
-    //  - which timestamp?
-    //  - how many timestamps?
+/*-------------------------------------------------------------*/
+/*--------------------------ACCESS-----------------------------*/
+/*-------------------------------------------------------------*/
 
+PointCloud* GrowthViewer::cloud_ts(int time_index) const {
     if (models().size() < time_index){
         std::cout << "ERROR: could not access timestamp point cloud, index does not exist" << std::endl;
         return nullptr;
@@ -56,7 +50,6 @@ PointCloud* GrowthViewer::cloud_ts(int time_index) const {
 
 
 const GraphGT* GrowthViewer::skeleton_ts(SkeletonType type, int time_index) const {
-    /// access the different types of graphs within skeletons
     const GraphGT* skel = nullptr;
     if (trees_.size() < time_index){
         std::cout << "ERROR: could not access timestamp skeleton, index does not exist" << std::endl;
@@ -705,7 +698,10 @@ void GrowthViewer::cleanup() {
 }
 
 
-///-- DRAWING --
+/*-------------------------------------------------------------*/
+/*-------------------------DRAWING-----------------------------*/
+/*-------------------------------------------------------------*/
+
 bool GrowthViewer::update_importance_visuals_vertices(SkeletonType type, int ts_index, bool show, ImVec4 default_color){
     // reset colors if to be not shown
     if (!show){
@@ -1369,7 +1365,10 @@ bool GrowthViewer::create_inter_skeleton_drawable(int item_index){
 }
 
 
-///-- IN --
+/*-------------------------------------------------------------*/
+/*----------------------------IN-------------------------------*/
+/*-------------------------------------------------------------*/
+
 bool GrowthViewer::open()
 {
     for (auto m : models_)
@@ -1487,7 +1486,10 @@ bool GrowthViewer::complete_multitemporal_import(std::vector<std::string> filena
 }
 
 
-///-- OUT --
+/*-------------------------------------------------------------*/
+/*---------------------------OUT-------------------------------*/
+/*-------------------------------------------------------------*/
+
 bool GrowthViewer::save() const {
     SurfaceMesh* mesh = branches_ts(0, 4); // todo: make index dependent
     if (!mesh) {
@@ -2104,7 +2106,10 @@ void GrowthViewer::export_correspondences() const {
 }
 
 
-/// -- RECONSTRUCT --
+/*-------------------------------------------------------------*/
+/*-----------------------RECONSTRUCT---------------------------*/
+/*-------------------------------------------------------------*/
+
 // todo: fix skeleton
 bool GrowthViewer::add_leaves() {
 //    if (!skeleton_) {
@@ -2529,8 +2534,6 @@ bool GrowthViewer::model_interpolation(){
 
 
 bool GrowthViewer::reconstruct_geometry(){
-    /// construct geometry for visualisation of grown multi-temporal structures
-
     // init mesh, clear previous if exists
     // check if old meshes need to be deleted
     int idx_offset = trees_.size() + (trees_.size() - 1); // 7

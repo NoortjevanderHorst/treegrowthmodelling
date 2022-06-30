@@ -37,10 +37,25 @@
 #include "g_tree.h"
 
 
-// The original easy3d viewer enables multiple models. In TreeViewer, we allow only three:
-//    - model #1: the point cloud
-//    - model #2: the 3D model of tree branches
-//    - model #3: the 3D model of leaves
+// The original easy3d viewer enables multiple models. With the number of input timestamps as n,
+// the GTree Viewer has:
+//    - model [0, n - 1]: the input point clouds + their skeleton graphs
+//    - model [n]: the merged main point cloud + skeleton graphs
+//    - model [n + 1, 2n]: the 3D mesh model of tree lobes
+//    - model [2n + 1, (2n + 1) + 2n]: the 3D mesh model of the tree branches,
+//    respectively for the corresponding and timestamp-specific skeletons
+//    - model [4n + 1]: the 3D mesh model of the tree branches of the merged main skeleton
+// ------------- example with 3 timestamps:
+// models: ts0 - ts1 - ts2 - merged cloud
+//          0     1     2          3
+//       - lobes 0 - lobes 1 - lobes 2
+//            4         5         6
+//       - branches corr 0 - branches ts 0
+//               7              8
+//       - branches corr 1 - branches ts 1
+//               9              10
+//       - branches corr 2 - branches ts 2 - branches merged
+//              11              12               13
 
 // A very good tutorial for imgui:
 // https://eliasdaler.github.io/using-imgui-with-sfml-pt1/
@@ -63,9 +78,6 @@ public:
 protected:
 //    virtual std::string usage() const override;
 
-    //overload the key press event to conduct the modelling process
-    bool key_press_event(int key, int modifiers) override;
-
     /*-------------------------------------------------------------*/
     /*----------------------------IN-------------------------------*/
     /*-------------------------------------------------------------*/
@@ -75,13 +87,13 @@ protected:
     bool open_multiple() override;
     std::string open_multitemporal() override;
     bool complete_multitemporal_import(std::vector<std::string> filenames) override;
-    bool save() const override;
-    bool save_batch() override;
 
     /*-------------------------------------------------------------*/
     /*---------------------------OUT-------------------------------*/
     /*-------------------------------------------------------------*/
 
+    bool save() const override;
+    bool save_batch() override;
     void export_skeleton() const override;
     void export_lobes() const override;
     void export_main() const override;
@@ -102,6 +114,7 @@ protected:
     bool add_merged_cloud() override;
     bool model_correspondence() override;
     bool model_growth() override;
+    /// construct geometry for visualisation of grown multi-temporal structures.
     bool reconstruct_geometry() override;
     bool model_interpolation() override;
     bool reconstruct_all() override;
@@ -110,11 +123,11 @@ protected:
     /*-------------------------DRAWING-----------------------------*/
     /*-------------------------------------------------------------*/
 
-    /** Visualisation common parameters
-     * @param type current type of skeleton graph.
-     * @param ts_index current timestamp index.
-     * @param show whether this visualisation should be turned off or on.
-     * @param default_color base color of the vertices/edges if not visualised (show is false).
+    /* Common visualisation parameters
+     * - type:          current type of skeleton graph.
+     * - ts_index:      current timestamp index.
+     * - show:          whether this visualisation should be turned off or on.
+     * - default_color: base color of the vertices/edges if not visualised (show is false).
      */
 
     /// Visualize weight property of the current skeleton's vertices.
@@ -168,39 +181,41 @@ protected:
     /*--------------------------ACCESS-----------------------------*/
     /*-------------------------------------------------------------*/
 
-    /// Timestamp model access
+    /// Timestamp input point cloud model.
     easy3d::PointCloud* cloud_ts(int time_index) const;
 
-    /// Timestamp skeleton graph access
+    /// Access the different types of graphs within skeletons (from trees_).
     const GraphGT* skeleton_ts(SkeletonType type, int time_index) const;
 
-    /// Timestamp lobe access
+    /// Timestamp 3D lobe convex hull mesh.
     easy3d::SurfaceMesh* lobe_ts(int time_index) const;
 
-    /// Timestamp branches mesh access
+    /// Timestamp 3D branches cylinder mesh.
     easy3d::SurfaceMesh* branches_ts(int time_index, int type_idx) const;
 
-    /// Timestamp visualisation methods controller
+    /// Timestamp visualisation methods controller.
     bool ts_visualisation(int ts_index, int item_index, bool show, int skeleton_type, std::vector<ImVec4> colors) override;
 
-    /// Timestamp visualisation default color controller
+    /// Timestamp visualisation default color controller.
     bool ts_change_colors(int ts_index, int item_index, ImVec4 color) override;
 
-    /// Inter-timestamp correspondence visualisation controller
+    /// Inter-timestamp correspondence visualisation controller.
     bool inter_visualisation(int item_index, bool show) override;
 
-    /// Compute color based on intensity
+    /// Compute color based on intensity.
     easy3d::vec3 colormap(float intensity);
 
-    /// Extend viewer drawing with shadowing
+    /// Additional functions linked to key presses.
+    bool key_press_event(int key, int modifiers) override;
+
+    /// Extend viewer drawing with shadowing.
     void draw() const override;
 
-    /// Clean attributes, reset viewer object
+    /// Clean attributes, reset viewer object.
     void cleanup() override;
 
 private:
     easy3d::SoftShadow*     shadow_;
-//    GSkeleton*              skeleton_;
     std::vector<GSkeleton*> trees_;
     GTree* gtree_;
 };
