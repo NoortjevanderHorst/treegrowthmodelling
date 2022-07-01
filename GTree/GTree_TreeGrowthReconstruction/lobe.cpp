@@ -40,7 +40,6 @@ bool Lobe::build_lobe_hulls(easy3d::SurfaceMesh *mesh){
     // todo: other conditions?
     double vol = CGAL::Polygon_mesh_processing::volume(hull);   // todo: make parameter
     if (vol < 1){
-//        std::cout << "constructed hull has small volume, skipping current hull" << std::endl;
         return false;
     }
 

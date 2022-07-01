@@ -144,7 +144,6 @@ bool GTree::compute_correspondence() {
 
 bool GTree::compute_main_edges(){
     GraphGT* graph = const_cast<GraphGT *>(&(skeleton_merged_->get_corresponding()));
-    // todo: is there really no way to do reference instead??
 
     // first, set all definite main flags
     std::vector<EdgeDescriptorGTGraph> main_detected;
@@ -232,9 +231,7 @@ bool GTree::compute_lobe_hulls() {
         auto mesh = new easy3d::SurfaceMesh;
         int cnt = 0;
         for (auto lobe : lobeset.second){
-//            if (cnt < 5){   // todo: temp, do just 1 lobe
-                lobe->build_lobe_hulls(mesh);
-//            }
+            lobe->build_lobe_hulls(mesh);
             cnt++;
         }
         lobe_meshes_.push_back(mesh);
@@ -355,34 +352,29 @@ bool GTree::grow_lobes() {
 
         int cnt = 0;
         for (auto lobe : lobeset.second){
-//            if (cnt == 80) {
-                // todo: find all original point cloud points within convex hull
+            // todo: find all original point cloud points within convex hull
 
-                easy3d::PointCloud *pc = const_cast<easy3d::PointCloud *>(&lobe->get_pointcloud());
-                Surface_mesh_cgal hull = lobe->get_convex_hull();
+            easy3d::PointCloud *pc = const_cast<easy3d::PointCloud *>(&lobe->get_pointcloud());
+            Surface_mesh_cgal hull = lobe->get_convex_hull();
 
-                // only process lobe if big enough
-                // todo: other constraints? lobe processing (bigger, smoother, more orb-shaped?)
-                if (CGAL::Polygon_mesh_processing::volume(hull) >= 1) {
-                    easy3d::vec3 root = skeletons_[lobeset.first].second->get_corresponding()[lobe->get_connector_node()].coords;
-                    easy3d::vec3 dir = root - skeletons_[lobeset.first].second->get_corresponding()[
-                            skeletons_[lobeset.first].second->get_corresponding()[lobe->get_connector_node()].parent
-                    ].coords;
+            // only process lobe if big enough
+            // todo: other constraints? lobe processing (bigger, smoother, more orb-shaped?)
+            if (CGAL::Polygon_mesh_processing::volume(hull) >= 1) {
+                easy3d::vec3 root = skeletons_[lobeset.first].second->get_corresponding()[lobe->get_connector_node()].coords;
+                easy3d::vec3 dir = root - skeletons_[lobeset.first].second->get_corresponding()[
+                        skeletons_[lobeset.first].second->get_corresponding()[lobe->get_connector_node()].parent
+                ].coords;
 
-                    GModelRegion gm_region(root, dir);
-                    gm_region.model_growth(pc, &hull);
+                GModelRegion gm_region(root, dir);
+                gm_region.model_growth(pc, &hull);
 
-                    lobe->set_skeleton(gm_region.get_graph());
-                } else {
-                    // assign cleared graph as skeleton (otherwise still set as part from MST)
-                    GraphGT lobe_graph = lobe->get_subgraph();
-                    lobe_graph.clear();
-                    lobe->set_skeleton(lobe_graph);
-                }
-
-                // todo: do stuff with generated growth model
-//            }
-
+                lobe->set_skeleton(gm_region.get_graph());
+            } else {
+                // assign cleared graph as skeleton (otherwise still set as part from MST)
+                GraphGT lobe_graph = lobe->get_subgraph();
+                lobe_graph.clear();
+                lobe->set_skeleton(lobe_graph);
+            }
             cnt++;
         }
         std::cout << "done." << std::endl;
@@ -395,17 +387,7 @@ bool GTree::grow_lobes() {
 }
 
 
-bool GTree::grow(){
-
-    // todo: control function for entire growth model
-
-    return true;
-}
-
-
 bool GTree::interpolate(){
-    /// for all timestamps minus the last one, compute geometric correspondences
-
     // going backwards so current base knows alterations that will be done to target in next interpolation
     for (int idx_skel = (skeletons_.size() - 2); idx_skel >= 0; -- idx_skel){
 
@@ -719,8 +701,6 @@ bool GTree::interpolate(){
                 if (tip_found){
                     (*g_target)[v_curr].corr_tip = true;
 
-//                    std::cout << "v curr " << v_curr  << " is tip" << std::endl;
-
                     // take steps back until a based vertex is reached
                     std::vector<VertexDescriptorGTGraph> back_list;
                     back_list.push_back(v_curr);
@@ -729,8 +709,6 @@ bool GTree::interpolate(){
                         VertexDescriptorGTGraph v_step = back_list.back();
                         back_list.pop_back();
                         // (back list always has just 1 vertex, loop will just stop if next parent is based (not added))
-
-//                        std::cout << "\tv step: " << v_step << std::endl;
 
                         // see if the step vertex qualifies as bifur point
                         if (degree(v_step, *g_target) > 2 && v_step != v_curr){
@@ -788,10 +766,6 @@ bool GTree::interpolate(){
                                 }
 
                                 // todo: paths not used here...
-
-//                                std::cout << "\twalked back, path target size: " << path_target.size()
-//                                          << ", base size: " << path_base.size() << std::endl;
-
                             }
 
                             //- take another step back
@@ -930,21 +904,6 @@ bool GTree::interpolate(){
                     path_base.push_back(v_next_corr_base);
                     v_next_corr_base = (*g_base)[v_next_corr_base].parent;
                 }
-
-                /*std::cout << "\ttarget path: [" << v_curr << "] ";
-                for (VertexDescriptorGTGraph v_path_t : path_target){
-                    std::cout << v_path_t << " ";
-                }
-                std::cout << "[" << v_next_corr_target << "]" << std::endl;
-
-                std::cout << "\tbase path:   [" << v_curr_base << "] ";
-                for (VertexDescriptorGTGraph v_path_b : path_base){
-                    std::cout << v_path_b << " ";
-                }
-                std::cout << "[" << v_next_corr_base << "]" << std::endl;
-
-                std::cout << "\ttarget path size: " << path_target.size() << std::endl;
-                std::cout << "\tbase path size:   " << path_base.size() << std::endl;*/
 
                 // establish correspondences for existing base vertices
                 if (!path_base.empty() && !path_target.empty()){
@@ -1185,15 +1144,9 @@ bool GTree::interpolate(){
         for (EdgeIteratorGTGraph eit = edt.first; eit != edt.second; ++eit) {
             VertexDescriptorGTGraph vsor_t = boost::source(*eit, *g_target);
             VertexDescriptorGTGraph vtar_t = boost::target(*eit, *g_target);
-//            std::cout << "target edge: " << vsor_t << " <> " << vtar_t << std::endl;
-//            std::cout << "\t added: " << (*g_target)[*eit].inter_add_mark
-//                      << ", deleted: " << (*g_target)[*eit].inter_delete_mark << std::endl;
-//            std::cout << "\tbase: " << (*g_target)[*eit].inter_base.first << " <> " << (*g_target)[*eit].inter_base.second
-//                      << ", target: " << (*g_target)[*eit].inter_target.first << " <> " << (*g_target)[*eit].inter_target.second
-//                      << std::endl;
+
             // edge did not correspond
             if (std::get<0>((*g_target)[*eit].inter_base) == -1){
-//                std::cout << "\t--- added mark" << std::endl;
                 (*g_target)[*eit].inter_add_mark = true;
             }
         }

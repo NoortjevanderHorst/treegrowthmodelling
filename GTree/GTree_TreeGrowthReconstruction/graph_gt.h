@@ -19,7 +19,6 @@ struct SGraphVertexPropGT
     double branch_level;                            // nr of bifurcation steps to root node
     double weight;                                  // weight based on nr of similar vertices in neighbourhood
     easy3d::vec3 normal = {0, 0, 0};   // maximum eigen vector of point from pca
-//    easy3d::PrincipalAxes<3, float> pca;            // pca of point
     bool clear_mark = false;                        // mark if vertex should be deleted
     bool delete_mark = false;                       // mark if vertex was deleted
     bool is_main = false;                           // flag vertices that are part of main (corresponding) skeleton
@@ -77,10 +76,6 @@ struct SGraphEdgePropGT
 class GraphGT : public boost::adjacency_list<boost::setS, boost::vecS, boost::undirectedS, SGraphVertexPropGT, SGraphEdgePropGT > {
 public:
     GraphGT() {}
-    // todo: add input to constructor?
-
-    // todo: add more properties?
-
 };
 
 typedef boost::graph_traits<GraphGT>::vertex_descriptor VertexDescriptorGTGraph;
