@@ -1,6 +1,39 @@
-//
-// Created by noort on 02/05/2022.
-//
+/*
+*	Copyright (C) 2022 by
+*       Noortje van der Horst (noortje.v.d.horst1@gmail.com)
+*       Liangliang Nan (liangliang.nan@gmail.com)
+*       3D Geoinformation, TU Delft, https://3d.bk.tudelft.nl
+*
+*	This file is part of GTree, which implements the 3D tree
+*   reconstruction and growth modelling method described in the following thesis:
+*   -------------------------------------------------------------------------------------
+*       Noortje van der Horst (2022).
+*       Procedural Modelling of Tree Growth Using Multi-temporal Point Clouds.
+*       Delft University of Technology.
+*       URL: http://resolver.tudelft.nl/uuid:d284c33a-7297-4509-81e1-e183ed6cca3c
+*   -------------------------------------------------------------------------------------
+*   Please consider citing the above thesis if you use the code/program (or part of it).
+*
+*   GTree is based on the works of Easy3D and AdTree:
+*   - Easy3D: Nan, L. (2021).
+*       Easy3D: a lightweight, easy-to-use, and efficient C++ library for processing and rendering 3D data.
+*       Journal of Open Source Software, 6(64), 3255.
+*   - AdTree: Du, S., Lindenbergh, R., Ledoux, H., Stoter, J., & Nan, L. (2019).
+*       AdTree: accurate, detailed, and automatic modelling of laser-scanned trees.
+*       Remote Sensing, 11(18), 2074.
+*
+*	GTree is free software; you can redistribute it and/or modify
+*	it under the terms of the GNU General Public License Version 3
+*	as published by the Free Software Foundation.
+*
+*	GTree is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+*	GNU General Public License for more details.
+*
+*	You should have received a copy of the GNU General Public License
+*	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 
 #include "cylinder_fitter.h"
@@ -23,14 +56,10 @@ CylFit::~CylFit() {
 
 /// --- CONTROL
 bool CylFit::reconstruct_branches(easy3d::SurfaceMesh* mesh_result){
-//    std::cout << "started reconstruction, root: " << RootV_ << std::endl;
     // compute all needed preliminary info (kd-tree and skeleton are set beforehand)
     compute_length_of_subtree(&skeleton_, RootV_);  // LengthOfSubtree
-//    std::cout << "subtree length computed" << std::endl;
     compute_graph_edges_weight(&skeleton_); // nWeight based on LengthOfSubtree
-//    std::cout << "edge weight computed" << std::endl;
     compute_all_edges_radius(TrunkRadius_); // nRadius based on nWeight
-//    std::cout << "edge radius computed" << std::endl;
 
     //generate branches
     if (!compute_branch_radius()) {
@@ -38,15 +67,11 @@ bool CylFit::reconstruct_branches(easy3d::SurfaceMesh* mesh_result){
         return false;
     }
 
-//    std::cout << "branch radius computed" << std::endl;
-
     //smooth branches
     if (!smooth_skeleton()) {
         std::cerr << "failed smoothing branches" << std::endl;
         return false;
     }
-
-//    std::cout << "smoothed skeleton" << std::endl;
 
     //extract surface model
     if (!extract_branch_surfaces(mesh_result)) {
@@ -54,16 +79,12 @@ bool CylFit::reconstruct_branches(easy3d::SurfaceMesh* mesh_result){
         return false;
     }
 
-//    std::cout << "extracted surfaces" << std::endl;
-
     return true;
 }
 
 
 /// --- ADDITIONAL
 void CylFit::obtain_initial_radius(const GraphB *graph) {
-//    std::cout << "\ntrunk fit statistics" << std::endl;
-
     //get the 2D bbox of the tree
     double min_x = DBL_MAX;
     double max_x = -DBL_MAX;
@@ -95,9 +116,6 @@ void CylFit::obtain_initial_radius(const GraphB *graph) {
     RootPos_.x = pLowest.x;
     RootPos_.y = pLowest.y;
     RootPos_.z = pLowest.z;
-
-//    std::cout << "the root vertex coordinate is:" << std::endl;
-//    std::cout << RootPos_.x << " " << RootPos_.y << " " << RootPos_.z << std::endl;
 
     //get the tree height and the bounding distance
     for (VertexIteratorGraphB vit = vt.first; vit != vt.second; ++vit){
@@ -133,36 +151,22 @@ void CylFit::obtain_initial_radius(const GraphB *graph) {
             maxY = trunkList[nP].y;
     }
 
-//    std::cout << "trunk box: x min: " << minX << ", x max: " << maxX << "; y min: " << minY << ", y max: " << maxY << std::endl;
-//    std::cout << "crown box: x min: " << min_x << ", x max: " << max_x << "; y min: " << min_y << ", y max: " << max_y << std::endl;
 
     //assign the raw radius value and return
     TrunkRadius_ = std::max((maxX - minX), (maxY - minY)) / 2.0;
-
-//    std::cout << "the initial radius is:" << std::endl;
-//    std::cout << TrunkRadius_ << std::endl;
 
     /// bind trunk radius to reasonable maximum
     double est_crown_rad = (((max_x - min_x) / 2) + ((max_y - min_y) / 2)) / 2;
     double est_max_trunk_rad = est_crown_rad / 30;  // trunk can max be 10% of the crown radius todo: guessed this
 
-//    std::cout << "tree height: " << TreeHeight_ << ", crown radius: " << est_crown_rad << std::endl;
-//    std::cout << "estimated max trunk radius: " << est_max_trunk_rad  << std::endl;
-
     if (TrunkRadius_ > est_max_trunk_rad){
         TrunkRadius_ = est_max_trunk_rad;
-
-//        std::cout << "adapted trunk radius to estimate of maximum: " << TrunkRadius_  << "\n" << std::endl;
     }
     // correct unrealistically small trunks
     if (TrunkRadius_ < (est_max_trunk_rad / 3)){
         float est_mean_trunk_rad = est_max_trunk_rad / 1.1; // based on guesses
         TrunkRadius_ = est_mean_trunk_rad;
-
-//        std::cout << "adapted trunk radius to estimate of maximum: " << TrunkRadius_  << "\n" << std::endl;
     }
-
-//    std::cout << "!!!!!!final trunk radius: " << TrunkRadius_ << std::endl;
 
     return;
 }
@@ -275,7 +279,6 @@ void CylFit::set_skeleton(GraphB graph){
                 if (dist <= 0.0001) {
                     dupes_idx[*vit] = *vitn;
                     dupe_found = true;
-//                    std::cout << "dupe found: " << *vit << " --> " << *vitn << std::endl;
                     break;
                 }
             }
@@ -287,7 +290,6 @@ void CylFit::set_skeleton(GraphB graph){
                 VertexDescriptorGraphB i_new = add_vertex(vnew, gres);
 
                 dupes_idx[*vit] = i_new;
-//                idx_map[*vit] = i_new;
             }
         }
     }
@@ -415,9 +417,6 @@ void CylFit::fit_trunk() {
         sourceV = target(trunkE, skeleton_);
         targetV = source(trunkE, skeleton_);
     }
-    //Vector3D pSource(simplified_skeleton_[sourceV].cVert.x, simplified_skeleton_[sourceV].cVert.y, simplified_skeleton_[sourceV].cVert.z);
-    //Vector3D pTarget(simplified_skeleton_[targetV].cVert.x, simplified_skeleton_[targetV].cVert.y, simplified_skeleton_[targetV].cVert.z);
-    //Cylinder currentC = Cylinder(pSource, pTarget, simplified_skeleton_[trunkE].nRadius);
 
     //initialize the mean, the point cloud matrix
     Vector3D pTop(0.0, 0.0, -DBL_MAX);
@@ -491,7 +490,6 @@ void CylFit::fit_trunk() {
 
         //conduct the second round of weighted least squares
         if (currentC.LeastSquaresFit(ptlist.begin(), ptlist.end())) {
-//            std::cout << "successfully conduct the non linear least squares!" << std::endl;
             pSourceAdjust = currentC.GetAxisPosition1();
             pTargetAdjust = currentC.GetAxisPosition2();
             radiusAdjust = currentC.GetRadius();
@@ -531,28 +529,19 @@ bool CylFit::smooth_skeleton() {
 
     skeleton_smooth_.clear();
 
-//    std::cout << "smoothing skeleton..." << std::endl;
-
     // get paths
     std::vector<Path> pathList;
     get_graph_for_smooth(pathList);
 
-//    std::cout << "found graph for smooth, num paths: " << pathList.size() << std::endl;
-
-
     // for each path get its coordinates and generate a smooth curve
     for (std::size_t n_path = 0; n_path < pathList.size(); ++n_path) {
-//        std::cout << "- path " << n_path << ", size: " << pathList[n_path].size() << std::endl;
-
         Path currentPath = pathList[n_path];
         std::vector<easy3d::vec3> interpolatedPoints;
         std::vector<double> interpolatedRadii;
-        static int numOfSlices = 20; //3 //20
+        static int numOfSlices = 20;
         std::vector<int> numOfSlicesCurrent;
         // retrieve the current path and its vertices
         for (std::size_t n_node = 0; n_node < currentPath.size() - 1; ++n_node) {
-//            std::cout << "\tnode " << n_node << std::endl;
-
             VertexDescriptorGraphB sourceV = currentPath[n_node];
             VertexDescriptorGraphB targetV = currentPath[n_node + 1];
             easy3d::vec3 pSource = skeleton_[sourceV].coords;
@@ -623,8 +612,6 @@ bool CylFit::smooth_skeleton() {
             interpolatedRadii.push_back(0);
         }
 
-//        std::cout << "- pushed back last vertex" << std::endl;
-
         if (interpolatedPoints.size() < 2)
             continue; // Too few points to construct a cylinder
 
@@ -638,17 +625,11 @@ bool CylFit::smooth_skeleton() {
             vertices.push_back(v);
         }
 
-//        std::cout << "- added verts" << std::endl;
-
         // add edges
         for (std::size_t np = 0; np < vertices.size() - 1; np++) {
             add_edge(vertices[np], vertices[np + 1], SGraphEdgePropB(), skeleton_smooth_);
         }
-
-//        std::cout << "- added edges" << std::endl;
     }
-
-//    std::cout << "set curves" << std::endl;
 
     return true;
 }
@@ -717,24 +698,12 @@ bool CylFit::extract_branch_surfaces(easy3d::SurfaceMesh *mesh_result) {
     for (const auto &branch : branches)
         add_generalized_cylinder_to_model(mesh_result, branch, slices);
 
-
-
-//    for (auto f : mesh_result->faces()){
-//        if (mesh_result->is_degenerate(f)){
-//            mesh_result->delete_face(f);
-//        }
-//    }
-//
-//    mesh_result->collect_garbage();
-
     // remove isolated vertices
     for (auto v : mesh_result->vertices()) {
         if (mesh_result->is_isolated(v))
             mesh_result->delete_vertex(v);
     }
     mesh_result->collect_garbage();
-
-
 
     return true;
 }
