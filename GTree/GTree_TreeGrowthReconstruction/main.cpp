@@ -6,7 +6,6 @@
 
 #include "growth_viewer.h"
 
-// todo: put every definition used by multiple classes here if possible
 
 
 int main(int argc, const char *argv[]) {

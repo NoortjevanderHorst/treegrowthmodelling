@@ -9,7 +9,10 @@ using namespace easy3d;
 using FloatType = float;    // todo: remove if not using quickhull
 
 
-/// --- INIT
+/*-------------------------------------------------------------*/
+/*---------------------------INIT------------------------------*/
+/*-------------------------------------------------------------*/
+
 GSkeleton::GSkeleton() : kd_points_(nullptr), kdtree_(nullptr), kd_points_corr_(nullptr), kdtree_corr_(nullptr) {
     pc_points_.clear();
 
@@ -34,44 +37,42 @@ GSkeleton::~GSkeleton() {
 }
 
 
-/// --- CONTROL
+/*-------------------------------------------------------------*/
+/*-------------------------CONTROL-----------------------------*/
+/*-------------------------------------------------------------*/
+
 bool GSkeleton::reconstruct_skeleton(const PointCloud* cloud, SurfaceMesh* mesh_result) {
-    std::cout << "loading points" << std::endl;
+    std::cout << "\nSkeleton reconstruction:" << std::endl;
+    std::cout << "\tloading points" << std::endl;
 
     if (!load_points(cloud)) {
         std::cerr << "ERROR: failed initial point registration step" << std::endl;
         return false;
     }
 
-    std::cout << "building delaunay" << std::endl;
+    std::cout << "\tbuilding delaunay" << std::endl;
 
     if (!build_delaunay()) {
         std::cerr << "ERROR: failed Delaunay triangulation step" << std::endl;
         return false;
     }
 
-    std::cout << "building mst" << std::endl;
+    std::cout << "\tbuilding mst" << std::endl;
 
     if (!build_mst()) {
         std::cerr << "ERROR: failed initial Minimum Spanning Tree step" << std::endl;
         return false;
     }
 
-    std::cout << "simplifying" << std::endl;
+    std::cout << "\tsimplifying" << std::endl;
 
     if(!build_simplified()){
         std::cout << "ERROR: failed MST simplification step" << std::endl;
         return false;
     }
 
-    /*const char *filename = "../../../data/testdata1/weight_ahn4.xyz";
-    const char *filename_l = "../../../data/testdata1/levels_ahn4.xyz";
-    export_weights(filename);
-    export_levels(filename_l);
-    const char *filename_edges = "../../../data/testdata1/importance.ply";
-    export_to_ply(filename_edges);*/
 
-    std::cout << "skeleton reconstruction complete" << std::endl;
+    std::cout << "Skeleton reconstruction complete." << std::endl;
 
     return true;
 }
@@ -86,13 +87,16 @@ bool GSkeleton::reconstruct_branches(const PointCloud *cloud, SurfaceMesh* mesh_
 
     cylfit->reconstruct_branches(mesh_result);
 
-    // todo: leafs
+    // todo: leaves
 
     return true;
 }
 
 
-/// --- BUILD STRUCTURES
+/*-------------------------------------------------------------*/
+/*--------------------BUILD STRUCTURES-------------------------*/
+/*-------------------------------------------------------------*/
+
 bool GSkeleton::load_points(const PointCloud *cloud){
     /// load point cloud points as vector of 3d vertices for easy access
 
@@ -168,8 +172,6 @@ bool GSkeleton::build_delaunay(){
 
 
 bool GSkeleton::build_mst() {
-    // todo: make function with point set input
-
     // initialize
     mst_.clear();
 
@@ -283,10 +285,9 @@ bool GSkeleton::build_simplified(){
 
 
 bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph root_vert){
-    // not in separate methods because that's about 3x as slow
+    // lot of code in 1 method, is not in separate methods because that's about 3x as slow
 
     if (num_vertices(simplified_) <= 1){
-        // todo: will this work if it has not been initialized?
         std::cout << "ERROR computing corresponding main skeleton, simplified skeleton does not exist" << std::endl;
         return false;
     }
@@ -295,11 +296,8 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
     corresponding_ = simplified_;   // copy
     ts_main_ = simplified_; // copy also to timestamp-specific (so not constrained with average) for later use
     rootv_corr_ = rootv_; // save root of delaunay/mst/simplified/tsmain skeletons (only corresponding is different)
-    // todo: perhaps store corresponding differently instead of this one, should check all further uses of rootv_ tho
 
     // ensure kdtree is set to simplified
-    // todo: can be done more efficiently by storing which graph the current kd-tree is of...
-    // timed it at around 0.01 s max tho
     build_KdTree(corresponding_);
 
     //--- flag all vertices close to any of the edges of main skeleton
@@ -398,7 +396,6 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
         }
         // add to timestamp main as well
         // has to be intermediary, because corresponding_ will be overwritten at the end of this function
-        // todo: this does not work 100% so far...
         if (corresponding_[*vit].is_main && (!corresponding_[*vit].delete_mark)){   // && degree(*vit, simplified_) > 1
             ts_main_[*vit].is_main = true;
         }
@@ -481,7 +478,6 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
 
     // copy vertices of delaunay into mst graph
     VertexDescriptorGTGraph rootv_curr = *(vtc.first);
-    // todo: constrain root
     for (VertexIteratorGTGraph vit = vtc.first; vit != vtc.second; ++vit) {
         SGraphVertexPropGT vert_new;
         vert_new.coords = delaunay_constrained[*vit].coords;
@@ -524,9 +520,7 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
     }
 
     // todo: add non-corresponding main branches to ts main
-    // todo: structural info of skeleton
-
-    // this actually detects the main bifur point...
+    // todo: check structural info of skeleton
 
     //--- find lobe connection points
 
@@ -536,15 +530,8 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
             EdgeDescriptorGTGraph e_to_parent = edge(mst_constrained[*vit].parent, *vit, mst_constrained).first;
             // node is part of main skeleton
             if (mst_constrained[e_to_parent].is_main) {
-
-                // detects main bifur point
-                /*if (mst_constrained[*vit].is_main && (mst_constrained[*vit].parent == rootv_curr) && (*vit != rootv_curr)){
-                    mst_constrained[*vit].is_lobe_node = true;
-                }*/
-                // todo: detect corresponding lobe nodes
+                // todo: detect correspondence in lobe nodes
                 // todo: detect unique node points (if possible use already existing method)
-
-                // todo: only on main skeleton!
 
                 // count non-main children
                 std::vector<VertexDescriptorGTGraph> nonmain_children;
@@ -593,23 +580,14 @@ bool GSkeleton::build_corresponding(GraphGT graph_corr, VertexDescriptorGTGraph 
         }
     }
 
-//    // for debug visualisation
-//    delaunay_ = delaunay_constrained;
-//    mst_ = mst_constrained;
-//    // do not use old mst_ and delaunay_, put result in corresponding_
-//    // unless delaunay and mst would be useful for other functions?
-//    // will not run simplification, skeleton has to remain as-is to correspond
-
     corresponding_ = mst_constrained;
-    rootv_corr_ = rootv_curr;  // todo: put this where it belongs in the process...
+    rootv_corr_ = rootv_curr;
 
     return true;
 }
 
 
 void GSkeleton::build_ts_main(GraphGT graph_corr){
-    /// connect & process timestamp main edges (flagged during building of ts correspondence)
-
     //-- build base main
 
     // obtain all edges between 2 vertices flagged as main
@@ -683,9 +661,6 @@ void GSkeleton::build_ts_main(GraphGT graph_corr){
 
 
 void GSkeleton::intermediary_skeleton_distance(GraphGT graph_corr){
-    /// process intermediary timestamp-specific main skeleton during skeleton correspondence computation process
-    /// enables visualisation/computation of differences between main skeletons (ts and merged)
-
     //-- compute minimum distance to merged main skeleton
 
     // make Kd-tree of midpoints of merged main edges
@@ -779,11 +754,8 @@ void GSkeleton::intermediary_skeleton_distance(GraphGT graph_corr){
 
 
 bool GSkeleton::detect_lobe_points(std::vector<Lobe*>& lobes){
-    /// flag lobe points (lobe index) & connectors
-
     // check if corresponding has vertices
     if (num_vertices(corresponding_) <= 1){
-        // todo: will this work if it has not been initialized?
         std::cout << "ERROR finding lobe points, corresponding skeleton does not have points" << std::endl;
         return false;
     }
@@ -853,8 +825,6 @@ bool GSkeleton::detect_lobe_points(std::vector<Lobe*>& lobes){
 
                 // increase/update current node index
                 lobe_idx_curr++;
-
-                // todo: perhaps use the Lobe class here to store the points/subgraph directly & add to GTree??
             }
         }
     }
@@ -862,15 +832,13 @@ bool GSkeleton::detect_lobe_points(std::vector<Lobe*>& lobes){
     std::cout << "\t---number of lobes found: " << lobe_idx_curr << std::endl;
 
     // store number of lobes found
-    num_lobes_ = lobe_idx_curr; // todo: put in gtree
+    num_lobes_ = lobe_idx_curr;
 
     return true;
 }
 
 
 bool GSkeleton::build_corresponding_merged() {
-    // todo: remove simplified/non-main edges?
-
     // make kd-tree with all original points
     build_KdTree(mst_);
 
@@ -962,9 +930,11 @@ bool GSkeleton::build_corresponding_merged() {
 }
 
 
-/// --- COMPUTE STRUCTURAL INFORMATION
+/*-------------------------------------------------------------*/
+/*--------------COMPUTE STRUCTURAL INFORMATION-----------------*/
+/*-------------------------------------------------------------*/
+
 bool GSkeleton::compute_branching_levels(GraphGT& graph){
-    /// set branching level per edge and per vertex
     std::vector<VertexDescriptorGTGraph> traverse_list;    // stack of nodes to still traverse
 
     // check if not only root
@@ -1023,8 +993,6 @@ bool GSkeleton::compute_branching_levels(GraphGT& graph){
 
 
 bool GSkeleton::compute_importance(GraphGT& graph){
-    /// set importance weight per vertex
-
     build_KdTree(graph);
 
     if (!compute_normals_pointcloud(graph)){
@@ -1075,7 +1043,6 @@ bool GSkeleton::compute_importance(GraphGT& graph){
 
 
 bool GSkeleton::compute_normals_pointcloud(GraphGT& graph){
-    // todo: work with graph/point set input
     // todo: check if (points in) kd tree exist
     // todo: adapting threshold (ahn2/3/4? density determination?)
     // todo: include original point in pca?
@@ -1121,8 +1088,6 @@ bool GSkeleton::compute_normals_pointcloud(GraphGT& graph){
 
 
 bool GSkeleton::find_all_lobe_nodes(GraphGT& graph){
-    /// detect viable bifurcation points in current (main merged correspondence) skeleton
-
     // check if graph exists
     if (num_edges(graph) == 0) {
         std::cerr << "ERROR: could not find bifurcation points, graph is empty" << std::endl;
@@ -1148,7 +1113,6 @@ bool GSkeleton::find_all_lobe_nodes(GraphGT& graph){
 
     std::pair<VertexIteratorGTGraph , VertexIteratorGTGraph> vt = vertices(graph);
     for (VertexIteratorGTGraph vit = vt.first; vit != vt.second; ++vit){
-        // todo: is clear_mark usage here safe?
         if (!(graph[*vit].delete_mark || *vit == rootv_ || graph[*vit].clear_mark)) {   // so far clear mark only for trunk, so safe to use
             EdgeDescriptorGTGraph e_to_parent = edge(graph[*vit].parent, *vit, graph).first;
             // node is part of main skeleton
@@ -1318,10 +1282,11 @@ bool GSkeleton::find_all_lobe_nodes(GraphGT& graph){
 }
 
 
-/// --- UTILITY
+/*-------------------------------------------------------------*/
+/*-------------------------UTILITY-----------------------------*/
+/*-------------------------------------------------------------*/
+
 void GSkeleton::clean_graph(GraphGT& graph){
-    /// For deleting vertices from the graph.
-    /// First mark vertices to delete as v.clear_mark=true, then run clean_graph().
     // Using boost::clear(vertex() instead of remove_vertex() as remove does not work for undirected graphs.
     // This means that vertices will always remain in the vertex set, but will not be connected to edges after removal.
 
@@ -1374,9 +1339,6 @@ void GSkeleton::simplify_branch(GraphGT& graph,
                                 bool allow_tip_removal,
                                 double min_length,
                                 double epsilon){
-    /// go through all edges connected to vertices in the branch vector, simplify (poly)lines
-    /// WARNING: tips will still be removed if they are below min_length, even if allow_tip_removal=false!
-
     bool end_branch = false;
     while(!end_branch){
         VertexDescriptorGTGraph v_curr = branch.back();
@@ -1466,8 +1428,6 @@ bool GSkeleton::simplify_line(GraphGT& graph,
                               std::vector<VertexDescriptorGTGraph> line,
                               bool allow_tip_removal,
                               double epsilon){
-    /// Douglas-Peucker line simplification for (poly)line represented by vector of vertices
-
     // do not simplify lines that are too short
     if (line.size() < 3){
         return false;
@@ -1540,7 +1500,7 @@ double GSkeleton::distance_point_to_line(vec3 point, vec3 line_left, vec3 line_r
 
 VertexDescriptorGTGraph GSkeleton::find_main_bifurcation(){
     // parameters
-    int max_level = 10;     // maximum branch level for branch to still be considered main
+    int max_level = 10;    // maximum branch level for branch to still be considered main
     int min_length = 5;    // minimum length (nr. edges) for branch to be considered main
     double max_height = 6; // maximum height difference with root coordinates of bifur point
 
@@ -1689,7 +1649,10 @@ VertexDescriptorGTGraph GSkeleton::find_main_bifurcation(){
 }
 
 
-/// --- EXPORT
+/*-------------------------------------------------------------*/
+/*--------------------------EXPORT-----------------------------*/
+/*-------------------------------------------------------------*/
+
 bool GSkeleton::export_weights(const char *file_out){
     // todo: make function with graph input
     // todo: automatic model file name? file ui?
