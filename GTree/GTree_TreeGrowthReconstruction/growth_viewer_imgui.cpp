@@ -216,28 +216,22 @@ namespace easy3d {
         {
             if (ImGui::MenuItem("Open cloud", "Ctrl+O"))
                 open();
-            if (ImGui::MenuItem("Open multiple clouds"))
-                open_multiple();
             if (ImGui::MenuItem("Open mesh", nullptr))
                 open_mesh();
             if (ImGui::MenuItem("Open multi-temporal", nullptr, &show_multitemp_import));
             ImGui::Separator();
-            if (ImGui::MenuItem("Save branches ...", "Ctrl+S"))
-                save();
-            if (ImGui::MenuItem("Save batch ..."))
-                save_batch();
-            ImGui::Separator();
             if (ImGui::MenuItem("Save skeleton corresponding ..."))
                 export_skeleton();
-            if (ImGui::MenuItem("Save skeleton ts main ..."))
+            if (ImGui::MenuItem("Save skeleton timestamps ..."))
                 export_main();
             ImGui::Separator();
-            if (ImGui::MenuItem("Save lobes ..."))
-                export_lobes();
             if (ImGui::MenuItem("Save branches corresponding ..."))
                 export_branches_corr();
-            if (ImGui::MenuItem("Save branches timestamp ..."))
+            if (ImGui::MenuItem("Save branches timestamps ..."))
                 export_branches_ts();
+            if (ImGui::MenuItem("Save lobes ..."))
+                export_lobes();
+            ImGui::Separator();
             if (ImGui::MenuItem("Save correspondences ..."))
                 export_correspondences();
             ImGui::Separator();
@@ -280,13 +274,6 @@ namespace easy3d {
     void ViewerImGuiGrow::draw_menu_reconstruction() {
         if (ImGui::BeginMenu("Reconstruction"))
         {
-            if (ImGui::MenuItem("Reconstruct Skeleton", nullptr))
-                reconstruct_skeleton();
-            if (ImGui::MenuItem("Add Leaves", nullptr))
-                add_leaves();
-            if (ImGui::MenuItem("Batch Reconstruct", nullptr))
-                batch_process();
-            ImGui::Separator();
             if (ImGui::MenuItem("Reconstruct Multi-temporal", nullptr))
                 reconstruct_multitemporal();
             if (ImGui::MenuItem("Add Merged Cloud", nullptr))

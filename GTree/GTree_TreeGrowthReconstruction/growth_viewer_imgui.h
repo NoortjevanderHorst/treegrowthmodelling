@@ -82,22 +82,17 @@ namespace easy3d {
         virtual bool ts_change_colors(int ts_index, int item_index, ImVec4 color) = 0;
         virtual bool inter_visualisation(int item_index, bool show) = 0;
 
-        virtual bool open_multiple() = 0;
         virtual bool open_mesh() = 0;
         virtual std::string open_multitemporal() = 0;
         virtual bool complete_multitemporal_import(std::vector<std::string> filenames) = 0;
+
         virtual void export_skeleton() const = 0;
-//        virtual void export_leaves() const = 0;
         virtual void export_lobes() const = 0;
         virtual void export_main() const = 0;
         virtual void export_branches_corr() const = 0;
         virtual void export_branches_ts() const = 0;
         virtual void export_correspondences() const = 0;
 
-        virtual bool reconstruct_skeleton() = 0;
-        virtual bool add_leaves() = 0;
-        virtual bool batch_process() = 0;
-        virtual bool save_batch() = 0;
         virtual bool reconstruct_multitemporal() = 0;
         virtual bool add_merged_cloud() = 0;
         virtual bool model_correspondence() = 0;

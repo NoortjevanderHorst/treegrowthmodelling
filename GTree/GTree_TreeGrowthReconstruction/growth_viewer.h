@@ -82,41 +82,77 @@ protected:
     /*----------------------------IN-------------------------------*/
     /*-------------------------------------------------------------*/
 
+    /// Import one or multiple .xyz point cloud files.
     bool open() override;
+    /// Import one or multiple .obj mesh files.
     bool open_mesh() override;
-    bool open_multiple() override;
+    /// Get location/name of a multi-temporal .xyz point cloud file to open.
     std::string open_multitemporal() override;
+    /// Import multi-temporal .xyz point cloud files using provided file names/paths.
     bool complete_multitemporal_import(std::vector<std::string> filenames) override;
 
     /*-------------------------------------------------------------*/
     /*---------------------------OUT-------------------------------*/
     /*-------------------------------------------------------------*/
 
-    bool save() const override;
-    bool save_batch() override;
+    /// Export the current merged and merged main skeletons (.ply).
     void export_skeleton() const override;
-    void export_lobes() const override;
+
+    /// Export the timestamp-specific main skeletons (.ply).
     void export_main() const override;
+
+    /// Custom method for saving the supplied skeleton graph to a file (.ply).
     void export_graph(const GraphGT& skeleton, easy3d::vec3 translation, const std::string& initial_name) const;
-    void export_graph_indices(const GraphGT& skeleton, easy3d::vec3 translation, const std::string& initial_name) const;
+
+    /** Custom method for saving the supplied mesh to a file (.obj)
+     * Note: mesh is not translated back to original position (would result in inaccuracies in geometry)!
+     */
+    void export_mesh(const easy3d::SurfaceMesh* mesh, const std::string& initial_name) const;
+
+    /// Save the 3D surface mesh of the lobe hulls of each timestamp (.obj).
+    void export_lobes() const override;
+
+    /// Save the 3D surface mesh of the branches of the merged main + lobe branches per timestamp (.obj).
     void export_branches_corr() const override;
+
+    /// Save the 3D surface mesh of the branches of the timestamp-specific main structure (.obj).
     void export_branches_ts() const override;
+
+    /** Save the timestamp-specific main skeleton as a graph (.ply).
+     * Save the vertex and edge transformation operations between each timestamp and the next as correspondence files (.csv).
+     * These files can be used by the GTree interpolator to compute and visualise the tree's structure changing (growing) between timestamps.
+     */
     void export_correspondences() const override;
 
     /*-------------------------------------------------------------*/
     /*-----------------------RECONSTRUCT---------------------------*/
     /*-------------------------------------------------------------*/
 
-    bool reconstruct_skeleton() override;
-    bool add_leaves() override;
-    bool batch_process() override;
+    /// Generate skeleton graph reconstructions of all timestamps.
     bool reconstruct_multitemporal() override;
+
+    /// Combine all timestamps into a merged point cloud.
     bool add_merged_cloud() override;
+
+    /** Reconstruct corresponding main structures:
+     * 1) Reconstruct main merged skeleton.
+     * 2) Find correspondences between timestamp edges.
+     * 3)Constrain timestamp-specific main structure with merged main structure.
+     * 4) Generate lobes.
+     * @return
+     */
     bool model_correspondence() override;
+
+    /// Perform region growing to reconstruct branching structure in lobes of all timestamps.
     bool model_growth() override;
-    /// construct geometry for visualisation of grown multi-temporal structures.
+
+    /// Construct geometry for visualisation of grown multi-temporal structures (lobe mesh, branches mesh).
     bool reconstruct_geometry() override;
+
+    /// Compute necessary correspondence operations on the main graph of a timestamp to transform it into the next.
     bool model_interpolation() override;
+
+    /// General control method to execute all growth reconstruction steps at once.
     bool reconstruct_all() override;
 
     /*-------------------------------------------------------------*/

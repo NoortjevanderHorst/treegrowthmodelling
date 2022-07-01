@@ -1306,15 +1306,18 @@ bool GrowthViewer::open()
     models_.clear();
 
     const std::vector<std::string> filetypes = {"*.xyz"};
-    const std::string& file_name = dialog::open("open files", std::string(""), filetypes);
+    const std::vector<std::string>& file_names = dialog::open("open files", std::string(""), filetypes, true);
 
-    if (!file_name.empty()) {
-        add_model(file_name);
-        set_title("GTree - " + file_system::simple_name(cloud_ts(0)->name()));
-        fit_screen();
-        return true;
+    int count = 0;
+    for (auto const& file_name : file_names) {
+        if (!file_name.empty()) {
+            add_model(file_name);
+            set_title("GTree - " + file_system::simple_name(cloud_ts(count)->name()));
+            fit_screen();
+            ++count;
+        }
     }
-    return false;
+    return count > 0;
 }
 
 
@@ -1338,28 +1341,6 @@ bool GrowthViewer::open_mesh()
     }
     return false;
 
-}
-
-
-bool GrowthViewer::open_multiple()
-{
-    for (auto m : models_)
-        delete m;
-    models_.clear();
-
-    const std::vector<std::string> filetypes = {"*.xyz"};
-    const std::vector<std::string>& file_names = dialog::open("open files", std::string(""), filetypes, true);
-
-    int count = 0;
-    for (auto const& file_name : file_names) {
-        if (!file_name.empty()) {
-            set_title("GTree - " + file_system::simple_name(cloud_ts(count)->name()));
-            add_model(file_name);
-            fit_screen();
-            ++count;
-        }
-    }
-    return count > 0;
 }
 
 
@@ -1409,6 +1390,7 @@ bool GrowthViewer::complete_multitemporal_import(std::vector<std::string> filena
             ++count;
         }
     }
+
     std::cout << "loaded all xyz files" << std::endl;
     std::cout << "nr models: " << models_.size() << std::endl;
 
@@ -1420,194 +1402,8 @@ bool GrowthViewer::complete_multitemporal_import(std::vector<std::string> filena
 /*---------------------------OUT-------------------------------*/
 /*-------------------------------------------------------------*/
 
-bool GrowthViewer::save() const {
-    SurfaceMesh* mesh = branches_ts(0, 4); // todo: make index dependent
-    if (!mesh) {
-        std::cerr << "model of branches does not exist" << std::endl;
-        return false;
-    }
-
-    const std::vector<std::string> filetypes = {"*.obj"};
-    const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    if (file_name.empty())
-        return false;
-
-    if (SurfaceMeshIO::save(file_name, mesh)) {
-        std::cout << "successfully saved the model of branches to file" << std::endl;
-
-        auto stop = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-        std::cout << "time taken to save branch geometry file: " << duration.count() << " ms" << std::endl;
-
-        return true;
-    }
-    else {
-        std::cerr << "failed saving the model of branches" << std::endl;
-        return false;
-    }
-}
-
-
-bool GrowthViewer::save_batch() {
-    std::string first_save;
-
-    for (auto m : models_){
-        if (dynamic_cast<SurfaceMesh*>(m)){
-            SurfaceMesh* mesh = dynamic_cast<SurfaceMesh*>(m);
-            if (!mesh) {
-                std::cerr << "model of branches does not exist" << std::endl;
-                return false;
-            }
-            std::string file_name;
-
-            if (!first_save.empty()){
-                file_name = first_save + mesh->name();
-            } else {
-                const std::vector<std::string> filetypes = {"*.obj"};
-                file_name = dialog::save("save file", mesh->name(), filetypes);
-
-                size_t last_slash = file_name.find_last_of("/\\");
-                first_save = file_name.substr(0, last_slash+1);
-
-                if (file_name.empty())
-                    return false;
-            }
-
-            if (SurfaceMeshIO::save(file_name, mesh)) {
-                std::cout << "successfully saved the model of branches to file" << std::endl;
-            }
-            else {
-                std::cerr << "failed saving the model of branches" << std::endl;
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-
 void GrowthViewer::export_skeleton() const {
-    // todo: for now only exports corresponding skeleton, not ts specific
-
-    for (int tree_idx = 0; tree_idx < (trees_.size() - 1); ++tree_idx){
-        const GraphGT& skeleton = trees_[tree_idx]->get_corresponding();
-        if (boost::num_edges(skeleton) == 0){
-            std::cerr << "skeleton has 0 edges" << std::endl;
-            return;
-        }
-
-        const std::vector<std::string> filetypes = {"*.ply"};
-        const std::string& initial_name = file_system::base_name(cloud_ts(tree_idx)->name()) + "_skeleton.ply";
-        const std::string& file_name = dialog::save("save file", initial_name, filetypes);
-        if (file_name.empty())
-            return;
-
-        // convert the boost graph to Graph (avoid modifying easy3d's GraphIO, or writing IO for boost graph)
-        std::vector<vec3> vertices;
-        std::vector<std::tuple<int, int>> edges;
-        std::map<int,int> off_map;
-        int off_value = 0;
-
-        auto vts = boost::vertices(skeleton);
-        for (VertexIteratorGTGraph iter = vts.first; iter != vts.second; ++iter) {
-            int vd = *iter;
-            if (boost::degree(vd, skeleton) != 0 && skeleton[vd].is_main) { // ignore isolated vertices
-                // only take main vertices
-                vertices.emplace_back(skeleton[vd].coords);
-                off_map.insert({vd, off_value});
-            } else {
-                off_value ++;
-            }
-        }
-
-        auto egs = boost::edges(skeleton);
-        for (EdgeIteratorGTGraph iter = egs.first; iter != egs.second; ++iter) {
-            if (skeleton[*iter].is_main) {
-                int s_b = boost::source(*iter, skeleton);
-                int t_b = boost::target(*iter, skeleton);
-
-                std::tuple<int, int> i = {s_b - off_map[s_b], t_b - off_map[t_b]};
-                edges.emplace_back(i);
-            }
-        }
-
-        std::ofstream storageFile;
-        storageFile.open(file_name);
-
-        // write header
-        storageFile << "ply" << std::endl;
-        storageFile << "format ascii 1.0" << std::endl;
-        storageFile << "element vertex " << vertices.size() << std::endl;
-        storageFile << "property float x" << std::endl;
-        storageFile << "property float y" << std::endl;
-        storageFile << "property float z" << std::endl;
-        storageFile << "element edge " << edges.size() << std::endl;
-        storageFile << "property int vertex1" << std::endl;
-        storageFile << "property int vertex2" << std::endl;
-        storageFile << "end_header" << std::endl << std::endl;
-
-
-        // allow for larger values being written to avoid rounding
-        vec3 trans;
-        trans = trees_[tree_idx]->get_translation();
-
-
-        for (auto &vertex : vertices) {
-            for (int i = 0; i < 3; ++i) {
-                vertex[i] = ((float) std::roundf((vertex[i] + trans[i])*1000))/1000;
-                storageFile << std::setprecision(std::to_string((int) vertex[i]).length() + 3);
-                storageFile << vertex[i] << " ";
-                storageFile << std::setprecision(-1);
-            }
-            storageFile << std::endl;
-        }
-
-        storageFile << std::endl;
-        for (const auto& edge: edges) {
-            storageFile << std::get<0>(edge) << " " << std::get<1>(edge) << std::endl;
-        }
-
-        storageFile.close();
-        std::cout << "skeleton file stored" <<std::endl;
-    }
-}
-
-
-void GrowthViewer::export_lobes() const {
-    for (SurfaceMesh* mesh : gtree_->get_lobe_meshes()){
-        if (!mesh) {
-            std::cerr << "model of lobes does not exist" << std::endl;
-            return;
-        }
-
-        const std::vector<std::string> filetypes = {"*.obj"};
-        const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
-        if (file_name.empty())
-            return;
-
-        if (SurfaceMeshIO::save(file_name, mesh))
-            std::cout << "successfully saved the model of leaves to file" << std::endl;
-        else
-            std::cerr << "failed saving the model of leaves" << std::endl;
-
-    }
-}
-
-
-void GrowthViewer::export_main() const {
-    //--- export original ts skeletonizations
-    for (int tree_idx = 0; tree_idx < (trees_.size() - 1); ++tree_idx){
-        const GraphGT& skeleton = trees_[tree_idx]->get_ts_main();
-        vec3 trans = trees_[tree_idx]->get_translation();
-        const std::string& initial_name = file_system::base_name(cloud_ts(tree_idx)->name()) + "_skeleton_tsmain.ply";
-
-        export_graph_indices(skeleton, trans, initial_name);
-    }
-
-    // -- export merged & main
+    // export merged & merged main
     GSkeleton* skeleton_merged = gtree_->get_merged_skeleton();
     const GraphGT& graph_merged = skeleton_merged->get_simplified();
     const GraphGT& graph_main = skeleton_merged->get_corresponding();
@@ -1617,19 +1413,28 @@ void GrowthViewer::export_main() const {
 
     export_graph(graph_merged, trans, initial_name_merged);
     export_graph(graph_main, trans, initial_name_main);
+}
 
+
+void GrowthViewer::export_main() const {
+    // export original ts skeletonizations
+    for (int tree_idx = 0; tree_idx < (trees_.size() - 1); ++tree_idx){
+        const GraphGT& skeleton = trees_[tree_idx]->get_ts_main();
+        vec3 trans = trees_[tree_idx]->get_translation();
+        const std::string& initial_name = file_system::base_name(cloud_ts(tree_idx)->name()) + "_skeleton_tsmain.ply";
+
+        export_graph(skeleton, trans, initial_name);
+    }
 }
 
 
 void GrowthViewer::export_graph(const GraphGT& skeleton, vec3 translation, const std::string& initial_name) const {
-//    const GraphGT& skeleton = trees_[tree_idx]->get_simplified();
     if (boost::num_edges(skeleton) == 0){
         std::cerr << "skeleton has 0 edges" << std::endl;
         return;
     }
 
     const std::vector<std::string> filetypes = {"*.ply"};
-//    const std::string& initial_name = file_system::base_name(cloud_ts(tree_idx)->name()) + "_skeleton.ply";
     const std::string& file_name = dialog::save("save file", initial_name, filetypes);
     if (file_name.empty())
         return;
@@ -1653,14 +1458,11 @@ void GrowthViewer::export_graph(const GraphGT& skeleton, vec3 translation, const
 
     auto egs = boost::edges(skeleton);
     for (EdgeIteratorGTGraph iter = egs.first; iter != egs.second; ++iter) {
-
         int s_b = boost::source(*iter, skeleton);
         int t_b = boost::target(*iter, skeleton);
 
-
         std::tuple<int, int> i = {s_b - off_map[s_b], t_b - off_map[t_b]};
         edges.emplace_back(i);
-
     }
 
     std::ofstream storageFile;
@@ -1697,88 +1499,80 @@ void GrowthViewer::export_graph(const GraphGT& skeleton, vec3 translation, const
     }
 
     storageFile.close();
-    std::cout << "skeleton file stored" <<std::endl;
+
+
+    size_t last_slash = file_name.find_last_of("/\\");
+    auto name_simple = file_name.substr(last_slash + 1, file_name.size());
+
+    std::cout << "Wrote skeleton to file: " << name_simple << std::endl;
 }
 
 
-void GrowthViewer::export_graph_indices(const GraphGT& skeleton, vec3 translation, const std::string& initial_name) const {
-//    const GraphGT& skeleton = trees_[tree_idx]->get_simplified();
-    if (boost::num_edges(skeleton) == 0){
-        std::cerr << "skeleton has 0 edges" << std::endl;
+void GrowthViewer::export_mesh(const SurfaceMesh* mesh, const std::string& initial_name) const {
+    if (mesh->n_vertices() == 0 || mesh->n_edges() == 0 || mesh->n_faces() == 0){
+        std::cout << "ERROR: could not export mesh, mesh does not contain elements.";
         return;
     }
 
-    const std::vector<std::string> filetypes = {"*.ply"};
-//    const std::string& initial_name = file_system::base_name(cloud_ts(tree_idx)->name()) + "_skeleton.ply";
-    const std::string& file_name = dialog::save("save file", initial_name, filetypes);
+    const std::vector<std::string> filetypes = {"*.obj"};
+    const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
     if (file_name.empty())
         return;
 
-    // convert the boost graph to Graph (avoid modifying easy3d's GraphIO, or writing IO for boost graph)
-    std::vector<vec4> vertices;
-    std::vector<std::tuple<int, int>> edges;
-    std::map<int,int> off_map;
-    int off_value = 0;
+    std::ofstream out;
+    out.open(file_name);
 
-    auto vts = boost::vertices(skeleton);
-    for (VertexIteratorGTGraph iter = vts.first; iter != vts.second; ++iter) {
-        int vd = *iter;
-        if (boost::degree(vd, skeleton) != 0) { // ignore isolated vertices
-            vertices.emplace_back(skeleton[vd].coords, vd);
-            off_map.insert({vd, off_value});
-        } else {
-            off_value ++;
+    SurfaceMesh::VertexProperty<vec3> points = mesh->get_vertex_property<vec3>("v:point");
+    for (SurfaceMesh::VertexIterator vit = mesh->vertices_begin(); vit != mesh->vertices_end(); ++vit) {
+        vec3 vertex = points[*vit];
+        out << "v ";
+        for (int i = 0; i < 3; ++i) {
+            vertex[i] = ((float) std::roundf((vertex[i]) * 1000)) / 1000;
+            out << std::setprecision(std::to_string((int) vertex[i]).length() + 3);
+            out << vertex[i] << " ";
+            out << std::setprecision(-1);
         }
+        out << "\n";
     }
 
-    auto egs = boost::edges(skeleton);
-    for (EdgeIteratorGTGraph iter = egs.first; iter != egs.second; ++iter) {
-
-        int s_b = boost::source(*iter, skeleton);
-        int t_b = boost::target(*iter, skeleton);
-
-
-        std::tuple<int, int> i = {s_b - off_map[s_b], t_b - off_map[t_b]};
-        edges.emplace_back(i);
-
+    for (SurfaceMesh::FaceIterator fit = mesh->faces_begin(); fit != mesh->faces_end(); ++fit) {
+        out << "f ";
+        SurfaceMesh::VertexAroundFaceCirculator fvit = mesh->vertices(*fit), fvend = fvit;
+        SurfaceMesh::HalfedgeAroundFaceCirculator fhit = mesh->halfedges(*fit);
+        do {
+            // write vertex index and normal index
+            out << (*fvit).idx() + 1 << " ";
+        } while (++fvit != fvend);
+        out << "\n";
     }
 
-    std::ofstream storageFile;
-    storageFile.open(file_name);
+    out.close();
 
-    // write header
-    storageFile << "ply" << std::endl;
-    storageFile << "format ascii 1.0" << std::endl;
-    storageFile << "element vertex " << vertices.size() << std::endl;
-    storageFile << "property float x" << std::endl;
-    storageFile << "property float y" << std::endl;
-    storageFile << "property float z" << std::endl;
-    storageFile << "property float i" << std::endl;
-    storageFile << "element edge " << edges.size() << std::endl;
-    storageFile << "property int vertex1" << std::endl;
-    storageFile << "property int vertex2" << std::endl;
-    storageFile << "end_header" << std::endl << std::endl;
+    size_t last_slash = file_name.find_last_of("/\\");
+    auto name_simple = file_name.substr(last_slash + 1, file_name.size());
 
-    // write vertices
-    for (auto &vertex : vertices) {
-        for (int i = 0; i < 4; ++i) {
-            // allow for larger values being written to avoid rounding
-            vertex[i] = ((float) std::roundf((vertex[i] + translation[i])*1000))/1000;
-            storageFile << std::setprecision(std::to_string((int) vertex[i]).length() + 3);
-            storageFile << vertex[i] << " ";
-            storageFile << std::setprecision(-1);
+    std::cout << "Wrote mesh to file: " << name_simple << std::endl;
+}
+
+
+void GrowthViewer::export_lobes() const {
+    for (SurfaceMesh* mesh : gtree_->get_lobe_meshes()){
+        if (!mesh) {
+            std::cerr << "model of lobes does not exist" << std::endl;
+            return;
         }
-        storageFile << std::endl;
-    }
 
-    // write edges
-    storageFile << std::endl;
-    for (const auto& edge: edges) {
-        storageFile << std::get<0>(edge) << " " << std::get<1>(edge) << std::endl;
-    }
+        const std::vector<std::string> filetypes = {"*.obj"};
+        const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
+        if (file_name.empty())
+            return;
 
-    storageFile.close();
-    std::cout << "skeleton file stored" <<std::endl;
+        if (SurfaceMeshIO::save(file_name, mesh))
+            std::cout << "successfully saved the model of lobes to file" << std::endl;
+        else
+            std::cerr << "failed saving the model of lobes" << std::endl;
+
+    }
 }
 
 
@@ -1790,15 +1584,9 @@ void GrowthViewer::export_branches_corr() const {
             return;
         }
 
-        const std::vector<std::string> filetypes = {"*.obj"};
-        const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
-        if (file_name.empty())
-            return;
+        const std::string& initial_name = mesh->name();
 
-        if (SurfaceMeshIO::save(file_name, mesh))
-            std::cout << "successfully saved the model of correspondence branches to file" << std::endl;
-        else
-            std::cerr << "failed saving the model of correspondence branches" << std::endl;
+        export_mesh(mesh,  initial_name);
     }
 }
 
@@ -1811,15 +1599,9 @@ void GrowthViewer::export_branches_ts() const {
             return;
         }
 
-        const std::vector<std::string> filetypes = {"*.obj"};
-        const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
-        if (file_name.empty())
-            return;
+        const std::string& initial_name = mesh->name();
 
-        if (SurfaceMeshIO::save(file_name, mesh))
-            std::cout << "successfully saved the model of timestamp branches to file" << std::endl;
-        else
-            std::cerr << "failed saving the model of timestamp branches" << std::endl;
+        export_mesh(mesh,  initial_name);
     }
 }
 
@@ -2040,218 +1822,6 @@ void GrowthViewer::export_correspondences() const {
 /*-----------------------RECONSTRUCT---------------------------*/
 /*-------------------------------------------------------------*/
 
-// todo: fix skeleton
-bool GrowthViewer::add_leaves() {
-//    if (!skeleton_) {
-//        std::cout << "please generate skeleton first!" << std::endl;
-//        return false;
-//    }
-//
-//    SurfaceMesh* mesh = leaves();
-//    if (mesh)
-//        mesh->clear();
-//    else {
-//        mesh = new SurfaceMesh;
-//        mesh->set_name(file_system::base_name(cloud()->name()) + "_leaves.obj");
-//    }
-//
-//    if (skeleton_->reconstruct_leaves(mesh)) {
-//        if (!leaves())
-//            add_model(mesh);
-//
-//        auto offset = cloud()->get_model_property<dvec3>("translation");
-//        if (offset) {
-//            auto prop = mesh->model_property<dvec3>("translation");
-//            prop[0] = offset[0];
-//        }
-//        TrianglesDrawable* leaves_drawable = mesh->triangles_drawable("surface");
-//        if (leaves_drawable) {
-//            leaves_drawable->set_per_vertex_color(false);
-//            leaves_drawable->set_uniform_coloring(vec4(0.50f, 0.83f, 0.20f, 1f));
-//        }
-//
-//        return true;
-//    }
-
-    return false;
-}
-
-
-// skeleton
-bool GrowthViewer::reconstruct_skeleton() {
-    if (!cloud_ts(0)) {
-        std::cout << "ERROR: point cloud does not exist" << std::endl;
-        return false;
-    }
-
-    // remove duplicate points
-    const float threshold = cloud_ts(0)->bounding_box().diagonal_length() * 0.001f;
-    std::cout << "removing duplicate vertices with threshold: " << threshold << std::endl;
-
-    std::vector<PointCloud::Vertex> points_to_remove;
-    const int maxBucketSize = 16;
-    std::vector<vec3>& points = cloud_ts(0)->points();
-    float* pointer = points[0];
-    KdTree kd(reinterpret_cast<Vector3D*>(pointer), points.size(), maxBucketSize);
-
-    std::vector<bool> keep(cloud_ts(0)->vertices_size(), true);
-
-    double sqr_dist = threshold * threshold;
-    for (std::size_t i = 0; i < points.size(); ++i) {
-        if (keep[i]) {
-            const vec3 &p = points[i];
-            kd.queryRange(Vector3D(p.x, p.y, p.z), sqr_dist, true);
-            int num = kd.getNOfFoundNeighbours();
-            if (num > 1) {
-                for (int j = 1; j < num; ++j) {
-                    int idx = kd.getNeighbourPositionIndex(j);
-                    keep[idx] = 0;
-                }
-            }
-        }
-    }
-
-    for (std::size_t i = 0; i < keep.size(); ++i) {
-        if (!keep[i])
-            points_to_remove.push_back(PointCloud::Vertex(i));
-    }
-
-    for (auto v : points_to_remove)
-        cloud_ts(0)->delete_vertex(v);
-    cloud_ts(0)->collect_garbage();
-    cloud_ts(0)->renderer()->get_points_drawable("vertices")->update_vertex_buffer(cloud_ts(0)->points());
-    std::cout << cloud_ts(0)->vertices_size() << " points remained" << std::endl;
-
-    // initialize/clean skeleton and branches that will be drawn
-    GSkeleton* skel_curr = new GSkeleton;
-
-    SurfaceMesh* mesh = branches_ts(0, 4);  // todo: fix index dependency
-    if (mesh)
-        mesh->clear();
-    else {
-        mesh = new SurfaceMesh;
-        mesh->set_name(file_system::base_name(cloud_ts(0)->name()) + "_branches.obj");
-    }
-    // todo: add mesh
-
-    // todo: moved this to before skeletonization, check if this is still correct after removing vertices
-    auto offset = cloud_ts(0)->get_model_property<dvec3>("translation");
-    if (offset) {
-        easy3d::vec3 translation = {(float) offset[0][0], (float) offset[0][1], (float) offset[0][2]};
-        skel_curr->set_translation(translation);
-        auto prop = mesh->model_property<dvec3>("translation");
-        prop[0] = offset[0];
-    }
-
-    // reconstruct skeleton/branches
-    bool status = skel_curr->reconstruct_skeleton(cloud_ts(0), mesh);
-
-    if (status) {
-        /*offset = cloud()->get_model_property<dvec3>("translation");
-        if (offset) {
-            translation = {(float) offset[0][0], (float) offset[0][1], (float) offset[0][2]};
-            std::cout << "trans after skel: " << translation << std::endl;
-            skeleton_->set_translation(translation);
-            auto prop = mesh->model_property<dvec3>("translation");
-            prop[0] = offset[0];
-        }*/
-//        if (!branches())
-//            add_model(mesh);
-//
-//        cloud()->set_visible(false);
-        trees_.push_back(skel_curr);
-        cloud_ts(0)->renderer()->set_visible(true);
-        return true;
-    }
-
-    return false;
-}
-
-
-bool GrowthViewer::batch_process(){
-    open_multiple();
-    std::cout << "loaded all xyz files" << std::endl;
-    std::cout << "nr models: " << models_.size() << std::endl;
-
-    std::vector<SurfaceMesh* > meshes_constructed;
-
-    for (auto m : models_){
-        PointCloud* cloud = dynamic_cast<PointCloud*>(m);
-
-        /// remove duplicates
-        const float threshold = cloud->bounding_box().diagonal_length() * 0.001f;
-
-        std::vector<PointCloud::Vertex> points_to_remove;
-        const int maxBucketSize = 16;
-        std::vector<vec3>& points = cloud_ts(0)->points();
-        float* pointer = points[0];
-        KdTree kd(reinterpret_cast<Vector3D*>(pointer), points.size(), maxBucketSize);
-
-        std::vector<bool> keep(cloud_ts(0)->vertices_size(), true);
-
-        double sqr_dist = threshold * threshold;
-        for (std::size_t i = 0; i < points.size(); ++i) {
-            if (keep[i]) {
-                const vec3 &p = points[i];
-                kd.queryRange(Vector3D(p.x, p.y, p.z), sqr_dist, true);
-                int num = kd.getNOfFoundNeighbours();
-                if (num > 1) {
-                    for (int j = 1; j < num; ++j) {
-                        int idx = kd.getNeighbourPositionIndex(j);
-                        keep[idx] = 0;
-                    }
-                }
-            }
-        }
-
-        for (std::size_t i = 0; i < keep.size(); ++i) {
-            if (!keep[i])
-                points_to_remove.push_back(PointCloud::Vertex(i));
-        }
-
-        for (auto v : points_to_remove)
-            cloud->delete_vertex(v);
-        cloud->collect_garbage();
-        cloud->renderer()->get_points_drawable("vertices")->update_vertex_buffer(cloud->points());
-        std::cout << cloud->vertices_size() << " points remained" << std::endl;
-
-        GSkeleton* skel_curr = new GSkeleton;
-
-        SurfaceMesh* mesh = dynamic_cast<SurfaceMesh*>(m);
-        if (mesh)
-            mesh->clear();
-        else {
-            mesh = new SurfaceMesh;
-            mesh->set_name(file_system::base_name(cloud->name()) + "_branches.obj");
-        }
-        bool status = skel_curr->reconstruct_skeleton(cloud, mesh);
-
-        if (status) {
-            auto offset = cloud->get_model_property<dvec3>("translation");
-            if (offset) {
-                easy3d::vec3 translation = {(float) offset[0][0], (float) offset[0][1], (float) offset[0][2]};
-                skel_curr->set_translation(translation);
-                auto prop = mesh->model_property<dvec3>("translation");
-                prop[0] = offset[0];
-            }
-            meshes_constructed.push_back(mesh);
-            trees_.push_back(skel_curr);
-
-            cloud->renderer()->set_visible(false);
-
-        }
-
-    }
-//    for (auto mesh: meshes_constructed){
-//        add_model(mesh);
-//    }
-
-    std::cout << "number of models, end: " << models_.size() << std::endl;
-
-    return true;
-}
-
-
 bool GrowthViewer::reconstruct_multitemporal(){
     // todo: check all models are really point clouds?
 
@@ -2312,12 +1882,8 @@ bool GrowthViewer::reconstruct_multitemporal(){
                 mesh->clear();
             else {
                 mesh = new SurfaceMesh;
-//        mesh->set_name(file_system::base_name(cloud_curr->name()) + "_branches.obj");
             }
 
-            // todo: add mesh
-
-            // todo: moved this to before skeletonization, check if this is still correct after removing vertices
             auto offset = cloud_curr->get_model_property<dvec3>("translation");
             if (offset) {
                 easy3d::vec3 translation = {(float) offset[0][0], (float) offset[0][1], (float) offset[0][2]};
@@ -2370,7 +1936,6 @@ bool GrowthViewer::add_merged_cloud(){
     gtree_->construct_merged_cloud();
     // add merged skeleton/point cloud to viewer
     PointCloud* cloud_merged = gtree_->get_merged_cloud();
-//    create_drawables(cloud_merged);
 
     cloud_merged->set_name("merged_timestamps");
     add_model(cloud_merged);
@@ -2449,7 +2014,6 @@ bool GrowthViewer::model_correspondence(){
 bool GrowthViewer::model_growth(){
     // region growing in lobes
     gtree_->grow_lobes();
-    // todo: general growth
 
     return true;
 }
@@ -2534,49 +2098,33 @@ bool GrowthViewer::reconstruct_geometry(){
         std::cout << "mesh added." << std::endl;
     }
 
-    // todo: merged
-
-
     return true;
 }
 
 
 bool GrowthViewer::reconstruct_all(){
-    if (models().size() == 0){
+    if (models().empty()){
         std::cout << "ERROR: could not reconstruct, no models exist." << std::endl;
         return false;
     }
 
-    std::cout << "a" << std::endl;
-
     // reconstruction
     reconstruct_multitemporal();
-
-    std::cout << "b" << std::endl;
 
     // merged structure
     add_merged_cloud();
 
-    std::cout << "c" << std::endl;
-
     // correspondence
     model_correspondence();
-
-    std::cout << "d" << std::endl;
 
     // growth
     model_growth();
 
-    std::cout << "e" << std::endl;
-
     // branches
     reconstruct_geometry();
 
-    std::cout << "f" << std::endl;
-
     // interpolation
     model_interpolation();
-    std::cout << "g" << std::endl;
 
 
     return true;
