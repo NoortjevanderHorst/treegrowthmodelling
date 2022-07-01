@@ -68,9 +68,9 @@ add_subdirectory(3rd_party)
 
 add_subdirectory(easy3d)
 
-add_subdirectory(Interpolation)
+add_subdirectory(GTree_Interpolation)
 
-add_subdirectory(TreeGrowthReconstruction)
+add_subdirectory(GTree_TreeGrowthReconstruction)
 
 ################################################################################
 
