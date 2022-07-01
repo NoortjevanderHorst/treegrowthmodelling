@@ -1,3 +1,40 @@
+/*
+*	Copyright (C) 2022 by
+*       Noortje van der Horst (noortje.v.d.horst1@gmail.com)
+*       Liangliang Nan (liangliang.nan@gmail.com)
+*       3D Geoinformation, TU Delft, https://3d.bk.tudelft.nl
+*
+*	This file is part of GTree, which implements the 3D tree
+*   reconstruction and growth modelling method described in the following thesis:
+*   -------------------------------------------------------------------------------------
+*       Noortje van der Horst (2022).
+*       Procedural Modelling of Tree Growth Using Multi-temporal Point Clouds.
+*       Delft University of Technology.
+*       URL: http://resolver.tudelft.nl/uuid:d284c33a-7297-4509-81e1-e183ed6cca3c
+*   -------------------------------------------------------------------------------------
+*   Please consider citing the above thesis if you use the code/program (or part of it).
+*
+*   GTree is based on the works of Easy3D and AdTree:
+*   - Easy3D: Nan, L. (2021).
+*       Easy3D: a lightweight, easy-to-use, and efficient C++ library for processing and rendering 3D data.
+*       Journal of Open Source Software, 6(64), 3255.
+*   - AdTree: Du, S., Lindenbergh, R., Ledoux, H., Stoter, J., & Nan, L. (2019).
+*       AdTree: accurate, detailed, and automatic modelling of laser-scanned trees.
+*       Remote Sensing, 11(18), 2074.
+*
+*	GTree is free software; you can redistribute it and/or modify
+*	it under the terms of the GNU General Public License Version 3
+*	as published by the Free Software Foundation.
+*
+*	GTree is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+*	GNU General Public License for more details.
+*
+*	You should have received a copy of the GNU General Public License
+*	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "viewer_back.h"
 
 
@@ -525,7 +562,6 @@ bool ViewerB::open_ts_graphs() {
         for (auto v : g_curr->vertices()) {
             // it can be assumed indices correspond between easy3d and boost (tested this)
             vec3 c_new = {coords[v].x, coords[v].y, coords[v].z};
-//            std::cout << "\tcoords read: " << c_new << std::endl;
             SGraphVertexPropB v_new;
             v_new.coords = c_new;
             VertexDescriptorGraphB idx_new = add_vertex(v_new, g_boost);
@@ -605,16 +641,10 @@ void ViewerB::compute_correspondence(){
     for (int i = 0; i < (interp_->nr_timestamps - 1); ++i){
         Graph* g_model = new Graph();
         GraphB g_inter;
-//        if (i == 0){
-//            g_inter = interp_->get_graph_01();
-//        } else {
-//            g_inter = interp_->get_graph_12();
-//        }
+
         g_inter = interp_->graphs_inter_[i];
 
         std::cout << "adding interpolation " << i << std::endl;
-
-//        std::cout << "------- vertices ---------" << std::endl;
 
         // vertices
         std::pair<VertexIteratorGraphB, VertexIteratorGraphB> vp = vertices(g_inter);
@@ -622,13 +652,9 @@ void ViewerB::compute_correspondence(){
         for (VertexIteratorGraphB vit = vp.first; vit != vp.second; ++vit){
             Graph::Vertex v_curr = g_model->add_vertex(g_inter[*vit].coords);
             v_ins.push_back(v_curr);
-//            std::cout << "\t" << *vit << " (" << g_inter[*vit].coords << ")" << std::endl;
             if (degree(*vit, g_inter) == 0){
-//                std::cout << "\t\tfloating!" << std::endl;
             }
         }
-
-//        std::cout << "------- edges ---------" << std::endl;
 
         // edges
         std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> ed = edges(g_inter);
@@ -637,8 +663,6 @@ void ViewerB::compute_correspondence(){
             VertexDescriptorGraphB vt = target(*eit, g_inter);
 
             g_model->add_edge(v_ins[vs], v_ins[vt]);
-
-//            std::cout << "\t" << vs << " <> " << vt << std::endl;
         }
 
         add_model(g_model);

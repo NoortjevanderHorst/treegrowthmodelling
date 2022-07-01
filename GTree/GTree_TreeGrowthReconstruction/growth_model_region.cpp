@@ -1,6 +1,39 @@
-//
-// Created by noort on 17/03/2022.
-//
+/*
+*	Copyright (C) 2022 by
+*       Noortje van der Horst (noortje.v.d.horst1@gmail.com)
+*       Liangliang Nan (liangliang.nan@gmail.com)
+*       3D Geoinformation, TU Delft, https://3d.bk.tudelft.nl
+*
+*	This file is part of GTree, which implements the 3D tree
+*   reconstruction and growth modelling method described in the following thesis:
+*   -------------------------------------------------------------------------------------
+*       Noortje van der Horst (2022).
+*       Procedural Modelling of Tree Growth Using Multi-temporal Point Clouds.
+*       Delft University of Technology.
+*       URL: http://resolver.tudelft.nl/uuid:d284c33a-7297-4509-81e1-e183ed6cca3c
+*   -------------------------------------------------------------------------------------
+*   Please consider citing the above thesis if you use the code/program (or part of it).
+*
+*   GTree is based on the works of Easy3D and AdTree:
+*   - Easy3D: Nan, L. (2021).
+*       Easy3D: a lightweight, easy-to-use, and efficient C++ library for processing and rendering 3D data.
+*       Journal of Open Source Software, 6(64), 3255.
+*   - AdTree: Du, S., Lindenbergh, R., Ledoux, H., Stoter, J., & Nan, L. (2019).
+*       AdTree: accurate, detailed, and automatic modelling of laser-scanned trees.
+*       Remote Sensing, 11(18), 2074.
+*
+*	GTree is free software; you can redistribute it and/or modify
+*	it under the terms of the GNU General Public License Version 3
+*	as published by the Free Software Foundation.
+*
+*	GTree is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+*	GNU General Public License for more details.
+*
+*	You should have received a copy of the GNU General Public License
+*	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "growth_model_region.h"
 
@@ -23,8 +56,6 @@ GModelRegion::GModelRegion (easy3d::vec3 root, easy3d::vec3 root_dir) : kd_point
     min_internode_length_ = 0.2;
 
     axiom_ = "A";
-
-    // todo: use previous edge as initial direction
 
     loc_ = root;
 
@@ -65,12 +96,6 @@ GModelRegion::GModelRegion (easy3d::vec3 root, easy3d::vec3 root_dir) : kd_point
     start_loc_ = loc_;
     start_plane_ = plane_;
 
-    // set statistics storage
-    stats_rg_["forward"] = 0;
-    stats_rg_["rotation"] = 0;
-    stats_rg_["roll"] = 0;
-    stats_rg_["internode_factor"] = 0;
-
     // initialize R-tree with root
     Point_3_boost pt_root = {loc_.x, loc_.y, loc_.z};
     rtree_out_.insert(pt_root);
@@ -101,8 +126,6 @@ GModelRegion::~GModelRegion() {
 //--- general
 
 bool GModelRegion::model_growth(const easy3d::PointCloud* points_in, const Surface_mesh_cgal* lobe_hull){
-    /// main controller function for running space colonization/region growing growth model
-
     if (!points_in){
         std::cout << "ERROR: could not do region growing, input point cloud does not exist" << std::endl;
         return false;
@@ -120,28 +143,8 @@ bool GModelRegion::model_growth(const easy3d::PointCloud* points_in, const Surfa
         return false;
     }
 
-    // todo: use r-tree, not kd tree (no distance search but knn, conical & spherical intersection possible)
-    // because r-tree is much faster when constantly deleting points (instead of rebuilding kd-tree EVERY time)
-
-    // useful output:
-    //  - parameter set for growth in lobes --> statistics
-    //  - grown skeleton inside lobe --> modelling
-
-    // method:
-    //  - make kd-tree of points, store points
-    //  - start growing
-    //  - refine growth parameters
-    //  - store/export growth model
-    //  - connect growth of all timestamps?
-
     // build kd tree and store points internally
     points_ = *points_in;
-
-//    if (kdtree_in_)
-//        delete kdtree_in_;
-//    if (kd_points_in_)
-//        delete kd_points_in_;
-    // todo: yes or no???
 
     unsigned int nr_points = points_.n_vertices();
     kd_points_in_ = new Vector3D[nr_points];
@@ -159,16 +162,12 @@ bool GModelRegion::model_growth(const easy3d::PointCloud* points_in, const Surfa
     kdtree_in_ = new KdTree(kd_points_in_, nr_points, 16);
 
     // set lobe hull property
-    // todo: perhaps this is not the best place for it...
     hull_mesh_ = *lobe_hull;
 
     // grow
     bool continue_grow = true;
-    while (continue_grow && num_iterations_ < 12) {   // todo: remove num iterations constraint, is just for testing
+    while (continue_grow && num_iterations_ < 12) {
         continue_grow = grow_iteration();
-//        std::cout << "iteration " << num_iterations_ << ", num verts: " << boost::num_vertices(graph_) << std::endl;
-//        std::cout << "num verts in R-tree: " << rtree_out_.size() << std::endl;
-//        std::cout << "axiom:\n" << axiom_ << std::endl << std::endl;
     }
 
     return true;
@@ -178,8 +177,6 @@ bool GModelRegion::model_growth(const easy3d::PointCloud* points_in, const Surfa
 //--- growing
 
 bool GModelRegion::grow_iteration(){
-    /// read the axiom once and apply the growth rules/constraints to form updated L-system
-
     // clear graph from previous iterations, because axiom gets read anew
     graph_.clear();
     // reset starting position
@@ -202,8 +199,6 @@ bool GModelRegion::grow_iteration(){
 
 
 std::string GModelRegion::read_line(std::string line){
-    /// (recursively) read the passed L-string
-
     // add starting vert to graph
     add_vertex(0);
 
@@ -445,14 +440,12 @@ std::string GModelRegion::read_line(std::string line){
         else if (line[i] == 'F'){
             // no value given in string
             if (value == 0){
-                // todo: no?
                 go_forward(def_forward_);
             } else {
                 go_forward(value);
             }
 
             // add vertex & edge to current graph
-            // todo: add to r-tree
             auto verts = graph_.m_vertices;
             unsigned int n_curr = verts.size();
             if (!branch_start){ // not start of (sub) branch
@@ -470,7 +463,6 @@ std::string GModelRegion::read_line(std::string line){
 
             // set trunk vertex to latest added vertex
             n_trunk = graph_.m_vertices.size() - 1;
-            // todo: do NOT know why
         }
 
         // rotate commands
@@ -519,9 +511,7 @@ std::string GModelRegion::read_line(std::string line){
 
 
 bool GModelRegion::is_viable(easy3d::vec3 pot_loc){
-    /// check if a given potential bud is viable or not: definition of hard growth constraints
-
-    // todo: maximum angle between parent!
+    // todo: maximum angle between parent
     // todo: and minimum angle
 
     // enforce internode size bounds
@@ -564,39 +554,7 @@ bool GModelRegion::is_viable(easy3d::vec3 pot_loc){
 }
 
 
-bool GModelRegion::is_viable_lateral(easy3d::vec3 pot_loc, easy3d::vec3 p_parent){
-
-    // perception cone search
-    float dist_parent = (loc_ - p_parent).length();
-    float cone_depth = 4 * dist_parent;    // cone height/depth [m], advised: [4l, 12l]
-    float cone_angle = 45 * M_PI / 180;   // max angle of cone [radians] (advised: 45 deg)
-    // todo: make parameters
-
-    // cone search needed points
-    Vector3D p_curr = {loc_.x, loc_.y, loc_.z};
-
-    easy3d::vec3 cone_endpt = {0, 0, 0};
-    GModelRegion model_cone(*this);
-    model_cone.go_forward(cone_depth);
-    easy3d::vec3 pt_cone_end = model_cone.loc_;
-    Vector3D p_cone_end = {pt_cone_end.x, pt_cone_end.y, pt_cone_end.z};
-
-    // cone search
-    kdtree_in_->queryConeIntersection(p_curr, p_curr, p_cone_end, cone_angle, false, true);
-    double nr_nbors = kdtree_in_->getNOfFoundNeighbours();
-
-    if (nr_nbors > 0){
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
 int GModelRegion::kill_zone(easy3d::vec3 node){
-    /// kill (remove) attraction points around a confirmed newly grown node
-    /// returns number of attraction points killed
-
     // todo: make parameter
     float kill_distance = pow(0.3, 2);  // [m]
 
@@ -628,18 +586,12 @@ int GModelRegion::kill_zone(easy3d::vec3 node){
     *kd_points_in_ = *kdtree_pts_new;
     auto kd_tree_new = new KdTree(kd_points_in_, nr_pts_remaining, 16);
     *kdtree_in_ = *kd_tree_new;
-//    num_attr_points_ = nr_pts_remaining;
-    // todo: somehow cant fkn reset this, wtf?
 
     return nr_nbors;
 }
 
 
 easy3d::vec3 GModelRegion::compute_growth_direction(easy3d::vec3 p_parent){
-    /// use perception cone on attraction point set to find optimal direction for growth
-    /// - input: apical node
-    /// - output: relative growth vector
-
     // todo: minimum internode length
 
     // todo: grow with increments until max internode length (could be set to shorter that way
@@ -674,8 +626,6 @@ easy3d::vec3 GModelRegion::compute_growth_direction(easy3d::vec3 p_parent){
     // cone search
     kdtree_in_->queryConeIntersection(p_curr, p_curr, p_cone_end, cone_angle, false, true);
     double nr_nbors = kdtree_in_->getNOfFoundNeighbours();
-
-//    std::cout << "point " << loc_ << " found " << nr_nbors << " neighbours: " << std::endl;
 
     if (nr_nbors > 0) {
         // use perception cone
@@ -772,9 +722,6 @@ easy3d::vec3 GModelRegion::compute_growth_direction(easy3d::vec3 p_parent){
 
 
 easy3d::vec3 GModelRegion::compute_growth_direction_lateral(easy3d::vec3 pot_pt, easy3d::vec3 p_parent){
-    /// correct growth direction for lateral nodes
-    /// with potential found attraction points (perception cone) + hull influence
-
     easy3d::vec3 direction = {0, 0, 0};
     easy3d::vec3 centroid = {0, 0, 0};
 
@@ -826,7 +773,6 @@ easy3d::vec3 GModelRegion::compute_growth_direction_lateral(easy3d::vec3 pot_pt,
                 dir_to_hit = dir_to_hit.normalize();
                 float hit_weight = 0.5 * (1 - ((pt_hit - loc_).length() / max_dist_diff));
                 easy3d::vec3 pt_hit_weighted = loc_ + (dir_to_hit * hit_weight);
-                // todo: not sure the weight is used correctly...
 
                 // update centroid
                 centroid.x += pt_hit_weighted.x;
@@ -885,9 +831,6 @@ easy3d::vec3 GModelRegion::compute_growth_direction_lateral(easy3d::vec3 pot_pt,
 
 
 easy3d::vec3 GModelRegion::compute_potential_location(std::string movement){
-    /// computes the absolute 3D location of a new node,
-    /// if the given movement command were to be carried out from the current location and rotation
-
     GModelRegion model_temp(*this);
     model_temp.read_line(movement);
     easy3d::vec3 bud_loc = model_temp.loc_;
@@ -897,9 +840,6 @@ easy3d::vec3 GModelRegion::compute_potential_location(std::string movement){
 
 
 std::tuple<double, double, double> GModelRegion::points_to_movement(easy3d::vec3 p_parent, easy3d::vec3 p_next){
-    /// find the relative angles and distance between current position and given 3d point (next)
-    /// returned as (rotation(y), roll(z), distance(f))
-
     std::tuple<double, double, double> movement = {0, 0, 0};    // y angle, z angle, distance
 
     //-- forward distance
@@ -952,10 +892,6 @@ std::tuple<double, double, double> GModelRegion::points_to_movement(easy3d::vec3
 
 
 std::string GModelRegion::movement_to_string(std::tuple<double, double, double> movement){
-    /// convert relative movement angles/distance from one node to the next into a string of L-system commands
-
-    // todo: fix output of "0.000" if it's smaller than that but not 0 (eg. 0.0001)
-
     double angle_y = std::get<0>(movement);
     double angle_z = std::get<1>(movement);
     double distance = std::get<2>(movement);
@@ -1051,8 +987,6 @@ void GModelRegion::go_forward(float distance) {
 }
 
 void GModelRegion::go_rotate(float angle) {
-    /// Rotate around the Y-axis, angle in [radians]
-
     //-- 1: roll to XZ plane
     // project current z-axis onto XY plane;
     easy3d::vec3 xAxis_orig = {1, 0, 0};
@@ -1097,8 +1031,6 @@ void GModelRegion::go_rotate(float angle) {
 }
 
 void GModelRegion::go_roll(float angle) {
-    /// rotate (roll) around the Z-axis, angle in [radians]
-
     easy3d::Mat3<float> rz(1);
     rz(0, 0) = std::cos(angle);
     rz(0, 1) = -std::sin(angle);
@@ -1109,7 +1041,6 @@ void GModelRegion::go_roll(float angle) {
 }
 
 void GModelRegion::add_vertex(unsigned int n_parent){
-    /// add a vertex (with it's correct parent index) to the current skeleton graph
     SGraphVertexPropGT vnew;
     vnew.coords = loc_;
     if (n_parent >= 0) {
