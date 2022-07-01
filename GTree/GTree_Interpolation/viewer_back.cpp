@@ -525,7 +525,6 @@ bool ViewerB::open_ts_graphs() {
         for (auto v : g_curr->vertices()) {
             // it can be assumed indices correspond between easy3d and boost (tested this)
             vec3 c_new = {coords[v].x, coords[v].y, coords[v].z};
-//            std::cout << "\tcoords read: " << c_new << std::endl;
             SGraphVertexPropB v_new;
             v_new.coords = c_new;
             VertexDescriptorGraphB idx_new = add_vertex(v_new, g_boost);
@@ -605,16 +604,10 @@ void ViewerB::compute_correspondence(){
     for (int i = 0; i < (interp_->nr_timestamps - 1); ++i){
         Graph* g_model = new Graph();
         GraphB g_inter;
-//        if (i == 0){
-//            g_inter = interp_->get_graph_01();
-//        } else {
-//            g_inter = interp_->get_graph_12();
-//        }
+
         g_inter = interp_->graphs_inter_[i];
 
         std::cout << "adding interpolation " << i << std::endl;
-
-//        std::cout << "------- vertices ---------" << std::endl;
 
         // vertices
         std::pair<VertexIteratorGraphB, VertexIteratorGraphB> vp = vertices(g_inter);
@@ -622,13 +615,9 @@ void ViewerB::compute_correspondence(){
         for (VertexIteratorGraphB vit = vp.first; vit != vp.second; ++vit){
             Graph::Vertex v_curr = g_model->add_vertex(g_inter[*vit].coords);
             v_ins.push_back(v_curr);
-//            std::cout << "\t" << *vit << " (" << g_inter[*vit].coords << ")" << std::endl;
             if (degree(*vit, g_inter) == 0){
-//                std::cout << "\t\tfloating!" << std::endl;
             }
         }
-
-//        std::cout << "------- edges ---------" << std::endl;
 
         // edges
         std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> ed = edges(g_inter);
@@ -637,8 +626,6 @@ void ViewerB::compute_correspondence(){
             VertexDescriptorGraphB vt = target(*eit, g_inter);
 
             g_model->add_edge(v_ins[vs], v_ins[vt]);
-
-//            std::cout << "\t" << vs << " <> " << vt << std::endl;
         }
 
         add_model(g_model);

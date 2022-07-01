@@ -15,7 +15,7 @@
 
 struct SGraphVertexPropB
 {
-    easy3d::vec3 coords;  // from root of tree A ts 0 (changed a little)
+    easy3d::vec3 coords;
     std::size_t parent;
     bool clear_mark = false;    // vertex should be deleted from current graph
     bool delete_mark = false;   // vertex was deleted from current graph

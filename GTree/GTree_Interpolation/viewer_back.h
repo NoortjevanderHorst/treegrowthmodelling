@@ -66,39 +66,6 @@
 #include <easy3d/renderer/drawable_lines.h>
 #include <easy3d/renderer/drawable_triangles.h>
 
-/*#include <easy3d/renderer/opengl.h>        // Initialize with glewInit()
-#include <3rd_party/glfw/include/GLFW/glfw3.h>    // Include glfw3.h after our OpenGL definitions
-
-#include <easy3d/core/surface_mesh.h>
-#include <easy3d/core/graph.h>
-#include <easy3d/core/point_cloud.h>
-#include <easy3d/core/poly_mesh.h>
-#include <easy3d/renderer/shader_program.h>
-#include <easy3d/renderer/shader_manager.h>
-#include <easy3d/renderer/transform.h>
-#include <easy3d/renderer/shapes.h>
-#include <easy3d/renderer/camera.h>
-#include <easy3d/renderer/manipulated_camera_frame.h>
-#include <easy3d/renderer/key_frame_interpolator.h>
-#include <easy3d/renderer/framebuffer_object.h>
-#include <easy3d/renderer/opengl_error.h>
-#include <easy3d/renderer/setting.h>
-#include <easy3d/renderer/text_renderer.h>
-#include <easy3d/renderer/texture_manager.h>
-#include <easy3d/fileio/resources.h>
-#include <easy3d/fileio/point_cloud_io.h>
-#include <easy3d/fileio/graph_io.h>
-#include <easy3d/fileio/surface_mesh_io.h>
-#include <easy3d/fileio/poly_mesh_io.h>
-#include <easy3d/fileio/ply_reader_writer.h>
-#include <easy3d/fileio/point_cloud_io_ptx.h>
-#include <easy3d/util/dialogs.h>
-#include <easy3d/util/file_system.h>
-#include <easy3d/util/logging.h>
-#include <easy3d/util/timer.h>
-#include <easy3d/util/string.h>
-#include <easy3d/renderer/manipulator.h>*/
-
 
 namespace easy3d {
     class PointCloud;

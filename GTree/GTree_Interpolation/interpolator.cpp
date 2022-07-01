@@ -6,10 +6,6 @@
 
 
 Interpolator::Interpolator() : graphs_ts(3), graphs_inter_(2), paths_v_(2), paths_e_(2), interpos(2){
-//    paths_v_[0].clear();
-//    paths_e_[0].clear();
-//    path_2_v_.clear();
-//    path_2_e_.clear();
     graphs_ts.clear();
     graphs_inter_.clear();
     paths_v_.clear();
@@ -19,14 +15,6 @@ Interpolator::Interpolator() : graphs_ts(3), graphs_inter_(2), paths_v_(2), path
 
 
 Interpolator::~Interpolator() {
-//    if (paths_v_[0].size() > 0)
-//        paths_v_[0].clear();
-//    if (paths_e_[0].size() > 0)
-//        paths_e_[0].clear();
-//    if (path_2_v_.size() > 0)
-//        path_2_v_.clear();
-//    if (path_2_e_.size() > 0)
-//        path_2_e_.clear();
     if (!graphs_ts.empty())
         graphs_ts.clear();
     if (!graphs_inter_.empty())
@@ -41,8 +29,7 @@ Interpolator::~Interpolator() {
 
 
 void Interpolator::open_path_files(std::vector<std::string> path_files) {
-    /// assumes all 4 path files are given!
-    /// as edges 0 - edges 1 - vertices 0 - vertices 1
+    // assumes all 4 path files are given as edges 0 - edges 1 - vertices 0 - vertices 1
 
     std::cout << "opening path files..." << std::endl;
 
@@ -185,29 +172,6 @@ void Interpolator::open_path_files(std::vector<std::string> path_files) {
         cnt++;
     }
 
-    /*std::cout << "--- egdes 0 ---" << std::endl;
-    for (auto edge_step : paths_e_[0]){
-        std::cout << edge_step.first.first << " " << edge_step.first.second << "-->"
-            << edge_step.second.first << " " << edge_step.second.second << std::endl;
-    }
-
-    std::cout << "--- egdes 1 ---" << std::endl;
-    for (auto edge_step : paths_e_[1]){
-        std::cout << edge_step.first.first << " " << edge_step.first.second << "-->"
-                  << edge_step.second.first << " " << edge_step.second.second << std::endl;
-    }
-
-    std::cout << "--- vertices 0 ---" << std::endl;
-    for (auto vert_step : paths_v_[0]){
-        std::cout << vert_step.first << "-->" << vert_step.second << std::endl;
-    }
-
-    std::cout << "--- vertices 1 ---" << std::endl;
-    for (auto vert_step : paths_v_[1]){
-        std::cout << vert_step.first << "-->" << vert_step.second << std::endl;
-    }*/
-
-
     std::cout << "opened files." << std::endl;
 }
 
@@ -227,27 +191,6 @@ void Interpolator::compute_correspondence(){
             graphs_ts[cnt] = graphs_inter_[cnt];
         }
 
-        /*std::cout << "\n\n###########################################################################" <<
-        "\n###########################################################################" <<
-        "\n###########################################################################" << std::endl;
-
-        std::cout << "\n### graphs created" << std::endl;
-        std::cout << "interpolation " << cnt << std::endl;
-        std::cout << "------- vertices ---------" << std::endl;
-        // vertices
-        std::pair<VertexIteratorGraphB, VertexIteratorGraphB> vp0 = vertices(graphs_inter_[cnt]);
-        for (VertexIteratorGraphB vit = vp0.first; vit != vp0.second; ++vit){
-            std::cout << "\t" << *vit << " (" << graphs_inter_[cnt][*vit].coords << ")" << std::endl;
-        }
-        std::cout << "------- edges ---------" << std::endl;
-        // edges
-        std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> ed = edges(graphs_inter_[cnt]);
-        for (EdgeIteratorGraphB eit = ed.first; eit != ed.second; ++eit){
-            VertexDescriptorGraphB vs = source(*eit, graphs_inter_[cnt]);
-            VertexDescriptorGraphB vt = target(*eit, graphs_inter_[cnt]);
-            std::cout << "\t" << vs << " <> " << vt << std::endl;
-        }*/
-
         // add placeholder vertices so indices match up...
         int vert_diff = num_vertices(graphs_ts[cnt+1]) - num_vertices(graphs_ts[cnt]);
         int idx_base = num_vertices(graphs_ts[cnt]) - 1;
@@ -259,21 +202,13 @@ void Interpolator::compute_correspondence(){
             add_vertex(v_new, graphs_inter_[cnt]);
             vcount++;
         }
-        // todo: algo fails if nr verts ts 0 > nr verts ts 1...
+        // todo: algo fails if nr verts ts 0 > nr verts ts 1
 
-        /*std::cout << "\n### added placeholder extra verts" << std::endl;
-        std::cout << "interpolation " << cnt << std::endl;
-        std::cout << "------- vertices ---------" << std::endl;
-        // vertices
-        std::pair<VertexIteratorGraphB, VertexIteratorGraphB> v1 = vertices(graphs_inter_[cnt]);
-        for (VertexIteratorGraphB vit = v1.first; vit != v1.second; ++vit){
-            std::cout << "\t" << *vit << " (" << graphs_inter_[cnt][*vit].coords << ")" << std::endl;
-        }*/
+
 
         std::map<VertexDescriptorGraphB, VertexDescriptorGraphB> idx_map;   // maps idx 0 <> idx1 & idx 01
         std::map<VertexDescriptorGraphB, VertexDescriptorGraphB> idx_map_reverse;   // idx1 & idx 01 <> maps idx 0
         for (auto v_path: paths_v_[cnt]) {
-//            std::cout << "- vert path: " << v_path.first << " <> " << v_path.second << std::endl;
             // insertion
             if (v_path.first == -1) {
                 // ts base
@@ -297,8 +232,6 @@ void Interpolator::compute_correspondence(){
 
                 idx_map[i_new] = v_path.second;
                 idx_map_reverse[v_path.second] = i_new;
-
-//                std::cout << "\tinsertion: " << i_new << " --> " << v_path.second << std::endl;
             }
             // deletion
             else if (v_path.second == -1){
@@ -317,9 +250,6 @@ void Interpolator::compute_correspondence(){
 
                 idx_map[v_path.first] = i_new;
                 idx_map_reverse[i_new] = v_path.first;
-
-//                std::cout << "\tdeletion: " << v_path.first << " <-- " << i_new << std::endl;
-//                std::cout << "\t\ti new: " << i_new << ", i inter: " << i_new_inter << std::endl;
             }
             // transformation
             else {
@@ -339,112 +269,19 @@ void Interpolator::compute_correspondence(){
 
                 idx_map[v_path.first] = v_path.second;
                 idx_map_reverse[v_path.second] = v_path.first;
-
-//                std::cout << "\ttransformation: " << v_path.first << " <> " << v_path.second << std::endl;
             }
         }
-
-        /*std::cout << "\n### processed vert paths" << std::endl;
-        std::cout << "interpolation " << cnt << std::endl;
-        std::cout << "------- vertices ---------" << std::endl;
-        // vertices
-        std::pair<VertexIteratorGraphB, VertexIteratorGraphB> v2 = vertices(graphs_inter_[cnt]);
-        for (VertexIteratorGraphB vit = v2.first; vit != v2.second; ++vit){
-            std::cout << "\t" << *vit << " (" << graphs_inter_[cnt][*vit].coords << ")" << std::endl;
-        }
-
-        std::cout << "\nvertex transformations:" << std::endl;
-        for (VertexIteratorGraphB vit = v2.first; vit != v2.second; ++vit){
-            std::cout << "v " << *vit << ": " << graphs_inter_[cnt][*vit].i_base
-            << " --> " << graphs_inter_[cnt][*vit].i_target << std::endl;
-        }*/
 
         correspond_edges(idx_map, cnt);
-
-        /*std::cout << "\n### processed edge paths" << std::endl;
-        std::cout << "interpolation " << cnt << std::endl;
-        std::cout << "------- vertices ---------" << std::endl;
-        // vertices
-        std::pair<VertexIteratorGraphB, VertexIteratorGraphB> v3 = vertices(graphs_inter_[cnt]);
-        for (VertexIteratorGraphB vit = v3.first; vit != v3.second; ++vit){
-            std::cout << "\t" << *vit << " (" << graphs_inter_[cnt][*vit].coords << ")" << std::endl;
-            std::cout << "\t\t" << "source: " << graphs_inter_[cnt][*vit].i_base << " (" << graphs_inter_[cnt][*vit].c_base << ")" << std::endl;
-            std::cout << "\t\t" << "target: " << graphs_inter_[cnt][*vit].i_target << " (" << graphs_inter_[cnt][*vit].c_target << ")" << std::endl;
-        }
-
-        std::cout << "------- edges ---------" << std::endl;
-
-        std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> edd = edges(graphs_ts[cnt+1]);
-        for (EdgeIteratorGraphB eit = edd.first; eit != edd.second; ++eit) {
-            VertexDescriptorGraphB vs = source(*eit, graphs_ts[cnt+1]);
-            VertexDescriptorGraphB vt = target(*eit, graphs_ts[cnt+1]);
-            auto e_found = edge(vs, vt, graphs_inter_[cnt]);
-            if (!e_found.second){
-                std::cout << "\t" << vs << " <> " << vt << std::endl;
-                std::cout << "\t\tcoords: " << graphs_ts[cnt+1][vs].coords << " <> " << graphs_ts[cnt+1][vt].coords << std::endl;
-            }
-
-        }
-
-        std::cout << "\n### processed edge paths" << std::endl;
-        std::cout << "interpolation " << cnt << std::endl;
-        std::cout << "------- vertices ---------" << std::endl;
-        // vertices
-        std::pair<VertexIteratorGraphB, VertexIteratorGraphB> v3 = vertices(graphs_inter_[cnt]);
-        for (VertexIteratorGraphB vit = v3.first; vit != v3.second; ++vit){
-            std::cout << "\t" << *vit << " (" << graphs_inter_[cnt][*vit].coords << ")" << std::endl;
-            std::cout << "\t\t" << "source: " << graphs_inter_[cnt][*vit].i_base << " (" << graphs_inter_[cnt][*vit].c_base << ")" << std::endl;
-            std::cout << "\t\t" << "target: " << graphs_inter_[cnt][*vit].i_target << " (" << graphs_inter_[cnt][*vit].c_target << ")" << std::endl;
-        }
-        std::cout << "------- edges ---------" << std::endl;
-        // edges
-        std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> edd = edges(graphs_inter_[cnt]);
-        for (EdgeIteratorGraphB eit = edd.first; eit != edd.second; ++eit){
-            VertexDescriptorGraphB vs = source(*eit, graphs_inter_[cnt]);
-            VertexDescriptorGraphB vt = target(*eit, graphs_inter_[cnt]);
-            std::cout << "\t" << vs << " <> " << vt << std::endl;
-//            std::cout << "\t\told: " << idx_map_reverse[vs] << " <> " << idx_map_reverse[vt] << std::endl;
-//            std::cout << "\t\tcollapsed: " << (graphs_inter_[cnt][vs].coords == graphs_inter_[cnt][vt].coords) << std::endl;
-//            std::cout << "\t\tcoords: " << graphs_inter_[cnt][vs].coords << " <> " << graphs_inter_[cnt][vt].coords << std::endl;
-
-            easy3d::vec3 ps_tar = graphs_inter_[cnt][vs].c_target;
-            easy3d::vec3 pt_tar = graphs_inter_[cnt][vt].c_target;
-            if (ps_tar != pt_tar) {
-                std::cout << "\t\tcoords target: " << ps_tar << " <> " << pt_tar << std::endl;
-                auto e = edge(vs, vt, graphs_ts[cnt + 1]);
-                if (e.second){
-                    std::cout << "\t\texists in target" << std::endl;
-                } else {
-                    std::cout << "\t\tNOT in target" << std::endl;
-                }
-            } else {
-                std::cout << "\t\tcollapsed" << std::endl;
-            }
-        }*/
-
     }
 
-    // todo: put this in a better place
     std::cout << "interpolating..." << std::endl;
     interpolate();
     std::cout << "interpolation done" << std::endl;
-
 }
 
 
 void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescriptorGraphB> idx_map, int ts){
-    // todo: make an edge map from ts0 indices to ts1 indices, so the edge steps will work for the intermediary
-    // todo: transform via edges
-
-    // todo: edge transforms
-    // 0. delete edges between old indices in g01
-    // 1. draw old edges between new node indices
-    // 2. make copies for add and delete, set to starting positions (use index map!)
-    // 3. interpolate
-    // 4. animate
-
-//    std::cout << "\n################ edge correspondence for ts " << ts << std::endl;
-
     GraphB graph_ebase  = graphs_inter_[ts];
     GraphB graph_etarget = graphs_inter_[ts];
 
@@ -454,37 +291,28 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
         remove_edge(*eit, graph_ebase);
     }
 
-//    std::cout << "\n- add edges to base:" << std::endl;
-
     std::pair <EdgeIteratorGraphB, EdgeIteratorGraphB> et_ts = edges(graphs_ts[ts]);
     for (EdgeIteratorGraphB eit = et_ts.first; eit != et_ts.second; ++eit) {
         VertexDescriptorGraphB v_source = idx_map[source(*eit, graphs_ts[ts])];
         VertexDescriptorGraphB v_target = idx_map[target(*eit, graphs_ts[ts])];
         add_edge(v_source, v_target, graph_ebase);
-
-//        std::cout << "\tadded edge " << v_source << " <> " << v_target << " to base" << std::endl;
     }
-
-//    std::cout << "\n- add edges to target:" << std::endl;
 
     // old edges --> new edges
     std::vector<std::pair<VertexDescriptorGraphB, VertexDescriptorGraphB> > twin_edges;   // edges added to target that already existed in base
     for (auto step : paths_e_[ts]){
         std::pair<int, int> e0 = step.first;
         std::pair<int, int> e1 = step.second;
-//        std::cout << "- step " << e0.first << " " << e0.second << " <> " << e1.first << " " << e1.second << std::endl;
 
         // insertion
         if (e0.first == -1){
             add_edge(e1.first, e1.second, graph_etarget);
             // adds new vertex with default coordinates if it doesn't exist yet
-//            std::cout << "\t(ins) added edge " << e1.first << " <> " << e1.second << " to target" << std::endl;
         }
 
         // deletion
         else if (e1.first == -1){
             remove_edge(e0.first, e0.second, graph_etarget);
-//            std::cout << "\t(del) removed edge " << e0.first << " <> " << e0.second << " from target" << std::endl;
         }
 
         // substitution = del (+add)
@@ -500,17 +328,14 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
 
             if (!twin_found){
                 remove_edge(e0.first, e0.second, graph_etarget);
-//                std::cout << "\t(sub) removed edge " << e0.first << " <> " << e0.second << " from target" << std::endl;
             }
 
             add_edge(e1.first, e1.second, graph_etarget);
-//            std::cout << "\t(sub) added edge " << e1.first << " <> " << e1.second << " to target" << std::endl;
 
             // store twin edges that should NOT be deleted the second time they are edited
             bool e_exist = edge(e1.first, e1.second, graph_ebase).second;
             if (e_exist){
                 twin_edges.emplace_back(e1.first, e1.second);
-//                std::cout << "\t(sub) TWIN edge: " << e1.first << " <> " << e1.second << std::endl;
             }
         }
 
@@ -565,16 +390,11 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
         }
     }
 
-//    std::cout << "\n- chained deletion target pos setting: " << std::endl;
-
     // set deleted points to correct target positions as well
     for (VertexIteratorGraphB vit = vt_b.first; vit != vt_b.second; ++vit){
         // get all leaf deleted verts
         std::vector<VertexDescriptorGraphB> v_del;
-//        std::cout << "v " << *vit << ": ";
         if (graphs_inter_[ts][*vit].c_base == graphs_inter_[ts][*vit].c_target && graph_ebase[*vit].inter_delete_mark){
-//            std::cout << "del" << std::endl;
-
             std::vector<VertexDescriptorGraphB> n_del;
             std::vector<VertexDescriptorGraphB> n_exist;
             int cnt = 0;
@@ -590,11 +410,8 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
                 cnt++;
             }
 
-//            std::cout << "\tnr nbor del: " << n_del.size() << ", exist: " << n_exist.size() << ", total: " << cnt << std::endl;
-
             if (!n_exist.empty()){
                 VertexDescriptorGraphB parent = n_exist[0];
-//                std::cout << "\tparent: " << parent << std::endl;
 
                 graphs_inter_[ts][*vit].c_target = graph_etarget[parent].coords;
                 graph_ebase[*vit].c_target = graph_etarget[parent].coords;
@@ -604,7 +421,6 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
                 while(!n_del.empty()){
                     VertexDescriptorGraphB v_curr = n_del.back();
                     n_del.pop_back();
-//                    std::cout << "\tdeleted nbor: " << v_curr << std::endl;
 
                     graphs_inter_[ts][v_curr].c_target = graph_etarget[parent].coords;
                     graph_ebase[v_curr].c_target = graph_etarget[parent].coords;
@@ -619,8 +435,6 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
                     }
                 }
             }
-        } else {
-//            std::cout << "not del" << std::endl;
         }
     }
 
@@ -629,8 +443,6 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
     for (EdgeIteratorGraphB eit = et_int.first; eit != et_int.second; ++eit){
         remove_edge(*eit, graphs_inter_[ts]);
     }
-
-//    std::cout << "\n- add deletion doubles to inter:" << std::endl;
 
     // make deletion doubles
     std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> et_bn = edges(graph_ebase);
@@ -649,18 +461,12 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
 
             // add edge
             add_edge(v_source, i_new, graphs_inter_[ts]);
-
-//            std::cout << "\tadded edge (new, del) " << v_source << " <> " << i_new << " to inter" << std::endl;
-//            std::cout << "\t\told edge " << v_source << " <> " << v_target << std::endl;
         }
         // if it exists in both base and target, simply add it to the intermediary graph
         else {
             add_edge(v_source, v_target, graphs_inter_[ts]);
-//            std::cout << "\tadded edge (exist) " << v_source << " <> " << v_target << " to inter" << std::endl;
         }
     }
-
-//    std::cout << "\n- add insertion doubles to inter:" << std::endl;
 
     // make insertion doubles
     std::pair<EdgeIteratorGraphB, EdgeIteratorGraphB> et_t = edges(graph_etarget);
@@ -679,21 +485,14 @@ void Interpolator::correspond_edges(std::map<VertexDescriptorGraphB, VertexDescr
 
             // add edge
             add_edge(v_source, i_new, graphs_inter_[ts]);
-//            std::cout << "\tadded edge (new, ins) " << v_source << " <> " << i_new << " to inter" << std::endl;
-//            std::cout << "\t\told edge " << v_source << " <> " << v_target << std::endl;
         }
     }
-
-//    std::cout << "setting target positionss..." ;
 
     // set all positions to starting coordinates
     std::pair<VertexIteratorGraphB, VertexIteratorGraphB> vt = vertices(graphs_inter_[ts]);
     for (VertexIteratorGraphB vit = vt.first; vit != vt.second; ++vit){
         graphs_inter_[ts][*vit].coords = graphs_inter_[ts][*vit].c_base;
     }
-
-//    std::cout << " done." << std::endl;
-
 }
 
 
@@ -727,10 +526,9 @@ void Interpolator::interpolate(){
 
             // get points
             std::vector<easy3d::vec3> points;
-            const unsigned int resolution = ((nr_steps + 1) * 10) + 1;// 61; // nr of splits in spline (= (nr frames - 1) / 10 + 1)
+            const unsigned int resolution = ((nr_steps + 1) * 10) + 1; // nr of splits in spline (= (nr frames - 1) / 10 + 1)
             for (unsigned int i = 0; i < resolution; i += 10) {
                 const easy3d::vec3 p = interpolator.eval_f(float(i) / float(resolution - 1));
-//            std::cout << "\tcurve point " << i << ": " << p << std::endl;
                 points.push_back(p);
             }
 
@@ -740,13 +538,4 @@ void Interpolator::interpolate(){
 
         interpos.push_back(res);
     }
-
-//    std::cout << "resulting interpos:" << std::endl;
-//    for (auto p : interpos){
-//        std::cout << graphs_inter_[0][p.first].c_base << " <> " << graphs_inter_[0][p.first].c_target << std::endl;
-//        for (auto ip : p.second){
-//            std::cout << "\t" << ip << std::endl;
-//        }
-//
-//    }
 }
