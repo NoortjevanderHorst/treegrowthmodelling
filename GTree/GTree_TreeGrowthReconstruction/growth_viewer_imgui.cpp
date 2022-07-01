@@ -226,8 +226,6 @@ namespace easy3d {
                 save();
             if (ImGui::MenuItem("Save batch ..."))
                 save_batch();
-            if (ImGui::MenuItem("Save leaves ..."))
-                export_leaves();
             ImGui::Separator();
             if (ImGui::MenuItem("Save skeleton corresponding ..."))
                 export_skeleton();

@@ -22,7 +22,6 @@ GrowthViewer::GrowthViewer()
     shadow_->set_sample_pattern(SoftShadow::SamplePattern(2));
     shadow_->set_darkness(0.3f);
     shadow_->set_softness(0.9f);
-//    shadow_->set_background_color(background_color_);
 
 //    std::cout << usage() << std::endl;
 }
@@ -83,7 +82,7 @@ SurfaceMesh* GrowthViewer::lobe_ts(int time_index) const {
         std::cout << "ERROR: could not could not access timestamp lobe mesh, no point clouds were added" << std::endl;
         return nullptr;
     } else {
-        int mesh_index = trees_.size() + time_index;  // models: ts0 - ts1 - ts2 - merged cloud - lobes 0 - lobes 1 - lobes 2
+        int mesh_index = trees_.size() + time_index;
         if (models().size() <= mesh_index){
             std::cout << "ERROR: could not access timestamp lobe mesh, index " << mesh_index << " does not exist" << std::endl;
             return nullptr;
@@ -107,25 +106,15 @@ SurfaceMesh* GrowthViewer::branches_ts(int time_index, int type_idx) const {
         int mesh_index = trees_.size() + (trees_.size() - 1);
         // corresponding
         if (type_idx == 3){
-            mesh_index += 2 * time_index;  // 4 + 3 + (2*idx)
+            mesh_index += 2 * time_index;
         }
         // ts main
         else if (type_idx == 4){
-            mesh_index += 2 * time_index + 1;  // 4 + 3 + (2*idx + 1)
+            mesh_index += 2 * time_index + 1;
         } else {
             std::cout << "ERROR: could not access timestamp branches mesh, type index " << type_idx << " does not exist" << std::endl;
             return nullptr;
         }
-        // models: ts0 - ts1 - ts2 - merged cloud
-        //          0     1     2          3
-        //       - lobes 0 - lobes 1 - lobes 2
-        //            4         5         6
-        //       - branches corr 0 - branches ts 0
-        //               7              8
-        //       - branches corr 1 - branches ts 1
-        //               9              10
-        //       - branches corr 2 - branches ts 2 - branches merged
-        //              11              12               13
 
         if (models().size() <= mesh_index){
             std::cout << "ERROR: could not access timestamp branches mesh, index " << mesh_index << " does not exist" << std::endl;
@@ -310,17 +299,6 @@ bool GrowthViewer::inter_visualisation(int item_index, bool show) {
     if (inter_drawable)
         inter_drawable->set_visible(show);
 
-//    LinesDrawable* graph_drawable = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
-//    // todo: pass which skeleton graph to use (mst, simplified, etc.)
-//    // edges
-//    if (item_index == 3){
-////        if (!graph_drawable)
-//        create_skeleton_drawable(skel_type, ts_index);
-//        if (graph_drawable)
-//            graph_drawable->set_visible(show);
-//        return true;
-//    }
-
     return true;
 }
 
@@ -358,7 +336,7 @@ bool GrowthViewer::ts_change_colors(int ts_index, int item_index, ImVec4 color){
 
         LinesDrawable* graph_drawable = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
         if (!graph_drawable) {
-            // todo: pass which skeleton to use
+            // MST as default, but will color the current skeleton type
             create_skeleton_drawable(ST_MST, ts_index, color);
             LinesDrawable *graph_drawable_new = cloud_ts(ts_index)->renderer()->get_lines_drawable("graph");
             // color and visibility get changed when adding, colors should be set correctly
@@ -378,98 +356,12 @@ bool GrowthViewer::ts_change_colors(int ts_index, int item_index, ImVec4 color){
 
 bool GrowthViewer::key_press_event(int key, int modifiers)
 {
-    /*if (key == GLFW_KEY_P && modifiers == GLFW_MOD_SHIFT) {
-        if (!cloud_ts(0))
-            return false;
-        cloud_ts(0)->set_visible(!cloud_ts(0)->is_visible());
-        return true;
-    }
-
-    else if (key == GLFW_KEY_G && modifiers == GLFW_MOD_SHIFT) {
-        if (!cloud_ts(0))
-            return false;
-
-        //shift the visibility of the graph drawable
-        LinesDrawable* graph_drawable = cloud_ts(0)->renderer()->get_lines_drawable("graph");
-        if (!graph_drawable)
-            create_skeleton_drawable(ST_MST, 0);
-//            create_skeleton_drawable(ST_DELAUNAY);
-        if (graph_drawable)
-            graph_drawable->set_visible(!graph_drawable->is_visible());
-        return true;
-    }
-
-    // show importance colors
-    else if (key == GLFW_KEY_I && modifiers == GLFW_MOD_SHIFT){
-        if (!cloud_ts(0))
-            return false;
-
-        LinesDrawable* graph_drawable = cloud_ts(0)->renderer()->get_lines_drawable("graph");
-        if (!graph_drawable){
-            create_skeleton_drawable(ST_MST, 0);
-        }
-        if (graph_drawable){
-            update_importance_visuals_edges(0);
-        }
-
-        graph_drawable->set_visible(true);
-
-        return true;
-    }
-
-    else if (key == GLFW_KEY_U && modifiers == GLFW_MOD_SHIFT){
-        if (!cloud_ts(0))
-            return false;
-
-        update_importance_visuals_vertices(0);
-
-        cloud_ts(0)->set_visible(true);
-
-        return true;
-    }
-
-    // show pca normals
-    else if (key == GLFW_KEY_N && modifiers == GLFW_MOD_SHIFT){
-        if (!cloud_ts(0))
-            return false;
-
-        LinesDrawable* normals_drawable = cloud_ts(0)->renderer()->get_lines_drawable("normals");
-        if (!normals_drawable){
-            create_normals_drawable(0);
-        }
-        if (normals_drawable){
-            normals_drawable->set_visible(!normals_drawable->is_visible());
-        }
-
-        return true;
-    }
-
-
-    else if (key == GLFW_KEY_B && modifiers == GLFW_MOD_SHIFT)
-    {
-        if (!branches())
-            return false;
-        branches()->set_visible(!branches()->is_visible());
-        return true;
-    }
-
-    else if (key == GLFW_KEY_L && modifiers == GLFW_MOD_SHIFT)
-    {
-        if (!leaves())
-            return false;
-        leaves()->set_visible(!leaves()->is_visible());
-        return true;
-    }*/
-
-    // debug commands for runnign all operations on 4 test datasets
-    // todo: remove or incorporate properly in end product
-
+    // debug commands for running all operations on 4 test datasets
     if (key == GLFW_KEY_A && modifiers == GLFW_MOD_SHIFT){
         // import files
         static std::vector<std::string> filenames(3);
         filenames.resize(3);
-//        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/testdata1/";
-        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/P5_data/A/";
+        std::string folder = "../../resources/data/GTree_examples/A/";
         filenames[0] = folder + "26CN1_ahn2_tree_0e76be44-6026-4edd-9800-dbf03aa47e40.xyz";
         filenames[1] = folder + "26CN1_ahn3_tree_0e76be44-6026-4edd-9800-dbf03aa47e40.xyz";
         filenames[2] = folder + "26CN1_ahn4_tree_0e76be44-6026-4edd-9800-dbf03aa47e40.xyz";
@@ -501,8 +393,7 @@ bool GrowthViewer::key_press_event(int key, int modifiers)
         // import files
         static std::vector<std::string> filenames(3);
         filenames.resize(3);
-//        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/testdata1/";
-        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/P5_data/B/";
+        std::string folder = "../../resources/data/GTree_examples/B/";
         filenames[0] = folder + "26CN1_ahn2_tree_3d431e24-ec36-43ca-b3cf-8ab154f4adca.xyz";
         filenames[1] = folder + "26CN1_ahn3_tree_3d431e24-ec36-43ca-b3cf-8ab154f4adca.xyz";
         filenames[2] = folder + "26CN1_ahn4_tree_3d431e24-ec36-43ca-b3cf-8ab154f4adca.xyz";
@@ -534,8 +425,7 @@ bool GrowthViewer::key_press_event(int key, int modifiers)
         // import files
         static std::vector<std::string> filenames(3);
         filenames.resize(3);
-//        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/testdata1/";
-        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/P5_data/C/";
+        std::string folder = "../../resources/data/GTree_examples/C/";
         filenames[0] = folder + "26CN1_ahn2_tree_5dda2264-29d1-4121-a36d-fc04e5ae2836.xyz";
         filenames[1] = folder + "26CN1_ahn3_tree_5dda2264-29d1-4121-a36d-fc04e5ae2836.xyz";
         filenames[2] = folder + "26CN1_ahn4_tree_5dda2264-29d1-4121-a36d-fc04e5ae2836.xyz";
@@ -567,8 +457,7 @@ bool GrowthViewer::key_press_event(int key, int modifiers)
         // import files
         static std::vector<std::string> filenames(3);
         filenames.resize(3);
-//        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/testdata1/";
-        std::string folder = "C:/Users/noort/Documents/1/TU/year_5/GEO2020_thesis/Code/Thesis_treegrowth_repo/data/P5_data/D/";
+        std::string folder = "../../resources/data/GTree_examples/D/";
         filenames[0] = folder + "26CN1_ahn2_tree_503089de-2979-448e-be2e-c394f35cfba5.xyz";
         filenames[1] = folder + "26CN1_ahn3_tree_503089de-2979-448e-be2e-c394f35cfba5.xyz";
         filenames[2] = folder + "26CN1_ahn4_tree_503089de-2979-448e-be2e-c394f35cfba5.xyz";
@@ -604,8 +493,6 @@ bool GrowthViewer::key_press_event(int key, int modifiers)
 
 
 void GrowthViewer::draw() const {
-    // todo: needs index cloud selector
-
     if (!shadowing_enabled_) {
         Viewer::draw();
         return;
@@ -620,7 +507,17 @@ void GrowthViewer::draw() const {
         const mat4& MV = camera_->modelViewMatrix();
         const vec4& wLightPos = inverse(MV) * setting::light_position;
 
-        if (cloud_ts(0)->renderer()->is_visible()) {
+        // check if any point cloud models are visible
+        bool pc_is_visible = false;
+        if (!trees_.empty()) {
+            for (int i = 0; i < trees_.size(); ++i){
+                if (cloud_ts(i)->renderer()->is_visible()){
+                    pc_is_visible = true;
+                }
+            }
+        }
+
+        if (pc_is_visible) {
             ShaderProgram* program = program = ShaderManager::get_program("points_color");
             if (!program) {
                 std::vector<ShaderProgram::Attribute> attributes;
@@ -651,8 +548,18 @@ void GrowthViewer::draw() const {
             }
         }
 
-        LinesDrawable* graph_drawable = cloud_ts(0)->renderer()->get_lines_drawable("graph");
-        if (graph_drawable && graph_drawable->is_visible()) {
+        // check if any graph models are visible
+        bool graph_is_visible = false;
+        if (!trees_.empty()) {
+            for (int i = 0; i < trees_.size(); ++i){
+                LinesDrawable* graph_drawable = cloud_ts(i)->renderer()->get_lines_drawable("graph");
+                if (graph_drawable && graph_drawable->is_visible()){
+                    graph_is_visible = true;
+                }
+            }
+        }
+
+        if (graph_is_visible) {
             ShaderProgram* program = ShaderManager::get_program("lines_color");
             if (!program) {
                 std::vector<ShaderProgram::Attribute> attributes;
@@ -665,22 +572,45 @@ void GrowthViewer::draw() const {
                 program->set_uniform("MVP", MVP);
                 program->set_uniform("per_vertex_color", false);
                 program->set_uniform("default_color", vec4(0.0f, 0.0f, 0.0f, 1.0f));
-                graph_drawable->draw(false);
+                for (auto m : models_) {
+                    if (!m->renderer()->is_visible())
+                        continue;
+                    for (auto d: m->renderer()->lines_drawables()) {
+                        if (d->is_visible()) {
+                            d->draw(false);
+                        }
+                    }
+                }
                 program->release();
             }
         }
     }
 
-//    std::vector<TrianglesDrawable*> surfaces;
-//    if (branches() && branches()->renderer()->is_visible()) {
-//        for (auto d : branches()->renderer()->triangles_drawables())
-//            surfaces.push_back(d);
-//    }
-//    if (leaves() && leaves()->renderer()->is_visible()) {
-//        for (auto d : leaves()->renderer()->triangles_drawables())
-//            surfaces.push_back(d);
-//    }
-//    shadow_->draw(surfaces);
+    // check if any surface meshes are visible
+    std::vector<TrianglesDrawable*> surfaces;
+    if (!trees_.empty()) {
+        for (int i = 0; i < trees_.size(); ++i) {
+            // check if any lobes are visible
+            if (lobe_ts(i) && lobe_ts(i)->renderer()->is_visible()){
+                for (auto d : lobe_ts(i)->renderer()->triangles_drawables()){
+                    surfaces.push_back(d);
+                }
+            }
+
+            // check if any branches are visible
+            if (branches_ts(i, 3) && branches_ts(i, 3)->renderer()->is_visible()){
+                for (auto d : branches_ts(i, 3)->renderer()->triangles_drawables()){
+                    surfaces.push_back(d);
+                }
+            }
+            if (branches_ts(i, 4) && branches_ts(i, 4)->renderer()->is_visible()){
+                for (auto d : branches_ts(i, 4)->renderer()->triangles_drawables()){
+                    surfaces.push_back(d);
+                }
+            }
+        }
+    }
+    shadow_->draw(surfaces);
 }
 
 

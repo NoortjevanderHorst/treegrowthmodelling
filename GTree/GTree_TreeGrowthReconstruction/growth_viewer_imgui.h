@@ -87,7 +87,7 @@ namespace easy3d {
         virtual std::string open_multitemporal() = 0;
         virtual bool complete_multitemporal_import(std::vector<std::string> filenames) = 0;
         virtual void export_skeleton() const = 0;
-        virtual void export_leaves() const = 0;
+//        virtual void export_leaves() const = 0;
         virtual void export_lobes() const = 0;
         virtual void export_main() const = 0;
         virtual void export_branches_corr() const = 0;
