@@ -1605,16 +1605,9 @@ void GrowthViewer::export_lobes() const {
             return;
         }
 
-        const std::vector<std::string> filetypes = {"*.obj"};
-        const std::string& file_name = dialog::save("save file", mesh->name(), filetypes);
-        if (file_name.empty())
-            return;
+        const std::string& initial_name = mesh->name();
 
-        if (SurfaceMeshIO::save(file_name, mesh))
-            std::cout << "successfully saved the model of lobes to file" << std::endl;
-        else
-            std::cerr << "failed saving the model of lobes" << std::endl;
-
+        export_mesh(mesh, initial_name);
     }
 }
 
