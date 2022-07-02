@@ -194,23 +194,25 @@ bool ViewerB::key_press_event(int key, int modifiers)
         vdraw->update_vertex_buffer(pts);
 
         // draw branches (or not) if that option was turned on
-        if (show_branches_) {
-            if (!branches(inter_idx_)) {
-                std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
-                          << std::endl;
-                return false;
+        if (models_.size() > (interp_->nr_timestamps + 2)) {
+            if (show_branches_) {
+                if (!branches(inter_idx_)) {
+                    std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
+                              << std::endl;
+                    return false;
+                }
+
+                branches(inter_idx_)->renderer()->set_visible(true);
+            } else {
+                if (branches(inter_idx_)) {
+                    branches(inter_idx_)->renderer()->set_visible(false);
+                }
             }
 
-            branches(inter_idx_)->renderer()->set_visible(true);
-        } else {
-            if (branches(inter_idx_)){
-                branches(inter_idx_)->renderer()->set_visible(false);
+            // remove previous branch visualisation
+            if (inter_idx_ > 0 && branches(inter_idx_ - 1)){
+                branches(inter_idx_-1)->renderer()->set_visible(false);
             }
-        }
-
-        // remove previous branch visualisation
-        if (inter_idx_ > 0 && branches(inter_idx_ - 1)){
-            branches(inter_idx_-1)->renderer()->set_visible(false);
         }
 
         return true;
@@ -240,23 +242,25 @@ bool ViewerB::key_press_event(int key, int modifiers)
         vdraw->update_vertex_buffer(pts);
 
         // draw branches (or not) if that option was turned on
-        if (show_branches_) {
-            if (!branches(inter_idx_)) {
-                std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
-                          << std::endl;
-                return false;
+        if (models_.size() > (interp_->nr_timestamps + 2)) {
+            if (show_branches_) {
+                if (!branches(inter_idx_)) {
+                    std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
+                              << std::endl;
+                    return false;
+                }
+
+                branches(inter_idx_)->renderer()->set_visible(true);
+            } else {
+                if (branches(inter_idx_)) {
+                    branches(inter_idx_)->renderer()->set_visible(false);
+                }
             }
 
-            branches(inter_idx_)->renderer()->set_visible(true);
-        } else {
-            if (branches(inter_idx_)){
-                branches(inter_idx_)->renderer()->set_visible(false);
+            // remove previous branch visualisation
+            if (inter_idx_ < (interp_->interpos[0][0].size() - 1) && branches(inter_idx_ + 1)) {
+                branches(inter_idx_ + 1)->renderer()->set_visible(false);
             }
-        }
-
-        // remove previous branch visualisation
-        if (inter_idx_ < (interp_->interpos[0][0].size() -1) && branches(inter_idx_ + 1)){
-            branches(inter_idx_+1)->renderer()->set_visible(false);
         }
 
         return true;
@@ -287,24 +291,26 @@ bool ViewerB::key_press_event(int key, int modifiers)
 
         // draw branches (or not) if that option was turned on
         int mesh_index = interp_->interpos[1][0].size() + inter_idx_;
-        if (show_branches_) {
-            if (!branches(mesh_index)) {
-                std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
-                          << std::endl;
-                return false;
+        if (models_.size() > (interp_->nr_timestamps + 2)) {
+            if (show_branches_) {
+                if (!branches(mesh_index)) {
+                    std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
+                              << std::endl;
+                    return false;
+                }
+
+                branches(mesh_index)->renderer()->set_visible(true);
+            } else {
+
+                if (branches(mesh_index)) {
+                    branches(mesh_index)->renderer()->set_visible(false);
+                }
             }
 
-            branches(mesh_index)->renderer()->set_visible(true);
-        } else {
-
-            if (branches(mesh_index)){
-                branches(mesh_index)->renderer()->set_visible(false);
+            // remove previous branch visualisation
+            if (inter_idx_ > 0 && branches(mesh_index - 1)) {
+                branches(mesh_index - 1)->renderer()->set_visible(false);
             }
-        }
-
-        // remove previous branch visualisation
-        if (inter_idx_ > 0 && branches(mesh_index - 1)){
-            branches(mesh_index-1)->renderer()->set_visible(false);
         }
 
         return true;
@@ -335,23 +341,25 @@ bool ViewerB::key_press_event(int key, int modifiers)
 
         // draw branches (or not) if that option was turned on
         int mesh_index = interp_->interpos[1][0].size() + inter_idx_;
-        if (show_branches_) {
-            if (!branches(mesh_index)) {
-                std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
-                          << std::endl;
-                return false;
+        if (models_.size() > (interp_->nr_timestamps + 2)) {
+            if (show_branches_) {
+                if (!branches(mesh_index)) {
+                    std::cout << "ERROR: could not visualize interpolated branches, branch mesh does not exist"
+                              << std::endl;
+                    return false;
+                }
+
+                branches(mesh_index)->renderer()->set_visible(true);
+            } else {
+                if (branches(mesh_index)) {
+                    branches(mesh_index)->renderer()->set_visible(false);
+                }
             }
 
-            branches(mesh_index)->renderer()->set_visible(true);
-        } else {
-            if (branches(mesh_index)){
-                branches(mesh_index)->renderer()->set_visible(false);
+            // remove previous branch visualisation
+            if (inter_idx_ < (interp_->interpos[1][0].size() - 1) && branches(mesh_index + 1)) {
+                branches(mesh_index + 1)->renderer()->set_visible(false);
             }
-        }
-
-        // remove previous branch visualisation
-        if (inter_idx_ < (interp_->interpos[1][0].size() -1) && branches(mesh_index + 1)){
-            branches(mesh_index+1)->renderer()->set_visible(false);
         }
 
         return true;
