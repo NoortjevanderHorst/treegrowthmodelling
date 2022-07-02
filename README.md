@@ -32,8 +32,10 @@ Reconstructions are:
 - Branch geometry of both the merged main + lobes and timestamp-specific skeletons, made using cylinder fitting.
 
 In order to interpolate and animate the changes between individual timestamp main reconstructions, use the Interpolator algorithm.
-Correspondence path files and the accompanying timestamp-specific skeleton graph reconstructions can be outputted with the TreeGrowthReconstruction algorithm.
+Import both the needed correspondence path files and the accompanying timestamp-specific skeleton graph reconstructions.
+The required files can be outputted with the TreeGrowthReconstruction algorithm.
 Intermediary steps between the known timestamps can then be interpolated and animated. Use the arrow keys to cycle through the steps.
+Branch geometry of all steps can also be generated via the "processing" menu, press "shift + 'b'" to turn the visualisation of them on or off.
 
 
 ### Data
@@ -41,7 +43,8 @@ Some test tree point clouds are provided in the '[GTree_examples](./resources/da
 
 **Note:** When testing on your point clouds, please make sure that:
 - your point cloud represents a single tree (i.e., the tree is segmented out from the background; no ground, no fence...);
-- the tree has an upright orientation (i.e., with Z-axis pointing up).
+- the tree has an upright orientation (i.e., with Z-axis pointing up);
+- the point cloud does not contain excessive noise.
 
 ---
 ### Citation
@@ -68,4 +71,4 @@ Should you have any questions, comments, or suggestions, please contact us at li
 
 https://3d.bk.tudelft.nl,
 
-July 1, 2022
+July 2, 2022
