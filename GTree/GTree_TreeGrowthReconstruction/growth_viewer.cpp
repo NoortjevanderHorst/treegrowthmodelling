@@ -66,6 +66,16 @@ GrowthViewer::~GrowthViewer() {}
 /*--------------------------ACCESS-----------------------------*/
 /*-------------------------------------------------------------*/
 
+std::string GrowthViewer::usage() const {
+    return Viewer::usage() + std::string(
+        "  Shift + 'a':         Load and reconstruct test dataset A       \n"
+            "  Shift + 'b':         Load and reconstruct test dataset B       \n"
+            "  Shift + 'c':         Load and reconstruct test dataset C       \n"
+            "  Shift + 'd':         Load and reconstruct test dataset D       \n"
+    );
+}
+
+
 PointCloud* GrowthViewer::cloud_ts(int time_index) const {
     if (models().size() < time_index){
         std::cout << "ERROR: could not access timestamp point cloud, index does not exist" << std::endl;
@@ -427,9 +437,9 @@ bool GrowthViewer::key_press_event(int key, int modifiers)
         static std::vector<std::string> filenames(3);
         filenames.resize(3);
         std::string folder = "../../resources/data/GTree_examples/B/";
-        filenames[0] = folder + "26CN1_ahn2_tree_3d431e24-ec36-43ca-b3cf-8ab154f4adca.xyz";
-        filenames[1] = folder + "26CN1_ahn3_tree_3d431e24-ec36-43ca-b3cf-8ab154f4adca.xyz";
-        filenames[2] = folder + "26CN1_ahn4_tree_3d431e24-ec36-43ca-b3cf-8ab154f4adca.xyz";
+        filenames[0] = folder + "26CN1_ahn2_tree_7a095ea2-f289-4b80-bd86-dbd7c00092aa.xyz";
+        filenames[1] = folder + "26CN1_ahn3_tree_7a095ea2-f289-4b80-bd86-dbd7c00092aa.xyz";
+        filenames[2] = folder + "26CN1_ahn4_tree_7a095ea2-f289-4b80-bd86-dbd7c00092aa.xyz";
 
         complete_multitemporal_import(filenames);
 
@@ -459,9 +469,9 @@ bool GrowthViewer::key_press_event(int key, int modifiers)
         static std::vector<std::string> filenames(3);
         filenames.resize(3);
         std::string folder = "../../resources/data/GTree_examples/C/";
-        filenames[0] = folder + "26CN1_ahn2_tree_5dda2264-29d1-4121-a36d-fc04e5ae2836.xyz";
-        filenames[1] = folder + "26CN1_ahn3_tree_5dda2264-29d1-4121-a36d-fc04e5ae2836.xyz";
-        filenames[2] = folder + "26CN1_ahn4_tree_5dda2264-29d1-4121-a36d-fc04e5ae2836.xyz";
+        filenames[0] = folder + "26CN1_ahn2_tree_43c62baa-384a-45cd-a326-a8a3c274cee5.xyz";
+        filenames[1] = folder + "26CN1_ahn3_tree_43c62baa-384a-45cd-a326-a8a3c274cee5.xyz";
+        filenames[2] = folder + "26CN1_ahn4_tree_43c62baa-384a-45cd-a326-a8a3c274cee5.xyz";
 
         complete_multitemporal_import(filenames);
 

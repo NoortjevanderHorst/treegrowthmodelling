@@ -210,12 +210,35 @@ void Interpolator::open_path_files(std::vector<std::string> path_files) {
 
 
 void Interpolator::compute_correspondence(){
+    // check if timestamp graphs exist
+    if (graphs_ts.empty()){
+        std::cout << "ERROR: could not interpolate, no graphs were given." << std::endl;
+        return;
+    }
+    // check if enough timestamp graphs were given
+    if (graphs_ts.size() < 2){
+        std::cout << "ERROR: could not interpolate, too few graphs were given." << std::endl;
+        return;
+    }
+
     std::cout << "graph ts 0 verts: " << num_vertices(graphs_ts[0]) << ", edges: " << num_edges(graphs_ts[0]) << std::endl;
     std::cout << "graph ts 1 verts: " << num_vertices(graphs_ts[1]) << ", edges: " << num_edges(graphs_ts[1]) << std::endl;
     std::cout << "graph ts 2 verts: " << num_vertices(graphs_ts[2]) << ", edges: " << num_edges(graphs_ts[2]) << std::endl;
 
-    graphs_inter_.push_back(graphs_ts[0]);
-    graphs_inter_.push_back(graphs_ts[1]);
+
+    // initialize intermediary graphs as copy of their base graph
+    for (int i_ts = 0; i_ts < (graphs_ts.size()-1); i_ts++){
+        graphs_inter_.push_back(graphs_ts[i_ts]);
+    }
+
+    // check if target graphs are always bigger than base (program will crash if not!)
+    // todo: make program properly work with this instead of stopping execution
+    for (int i_ts = 0; i_ts < (graphs_ts.size()-1); i_ts++){
+        if (num_vertices(graphs_ts[i_ts]) > num_vertices(graphs_ts[i_ts + 1])){
+            std::cout << "ERROR: could not interpolate, a later timestamp has fewer elements than an earlier one." << std::endl;
+            return;
+        }
+    }
 
     for (int cnt = 0; cnt < graphs_inter_.size(); ++cnt) {
         // todo: deletion adds to next graph, need local copies here of ts graphs to not break the next interpolation!!
@@ -235,10 +258,9 @@ void Interpolator::compute_correspondence(){
             add_vertex(v_new, graphs_inter_[cnt]);
             vcount++;
         }
-        // todo: algo fails if nr verts ts 0 > nr verts ts 1
+        // this algo is the one that fails if nr verts ts base > nr verts ts target
 
-
-
+        // vertex correspondence path processing
         std::map<VertexDescriptorGraphB, VertexDescriptorGraphB> idx_map;   // maps idx 0 <> idx1 & idx 01
         std::map<VertexDescriptorGraphB, VertexDescriptorGraphB> idx_map_reverse;   // idx1 & idx 01 <> maps idx 0
         for (auto v_path: paths_v_[cnt]) {
@@ -305,6 +327,7 @@ void Interpolator::compute_correspondence(){
             }
         }
 
+        // edge correspondence path processing
         correspond_edges(idx_map, cnt);
     }
 
