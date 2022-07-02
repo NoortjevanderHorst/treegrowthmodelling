@@ -114,7 +114,3 @@ private:
 };
 
 #endif
-
-
-
-#endif //EASY3D_VIEWER_BACK_H

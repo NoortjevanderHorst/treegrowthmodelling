@@ -63,10 +63,16 @@ void ViewerB::cleanup() {
 
 std::string ViewerB::usage() const {
     return Viewer::usage() + std::string(
-            "  Shift + P:       Show/Hide point cloud       \n"
-            "  Shift + G:       Show/Hide skeleton          \n"
-            "  Shift + B:       Show/Hide branches          \n"
-            "  Shift + L:       Show/Hide leaves            \n"
+        "  Left arrow :               Take a step back in intermediary graph 0/1       \n"
+            "  Right arrow:               Take a step forward in intermediary graph 0/1    \n"
+            "  Shift + left arrow:        Take a step back in intermediary graph 1/2       \n"
+            "  Shift + right arrow:       Take a step forward in intermediary graph 1/2    \n"
+            "  '1':                       Show/Hide Timestamp 0           \n"
+            "  '2':                       Show/Hide Timestamp 1            \n"
+            "  '3':                       Show/Hide Timestamp 2            \n"
+            "  '4':                       Show/Hide Intermediary graph 0/1            \n"
+            "  '5':                       Show/Hide Intermediary graph 1/2            \n"
+            "  Shift + 'b':               Show/Hide branch geometry    \n"
     );
 }
 

@@ -109,8 +109,6 @@ public:
     ~GrowthViewer() override;
 
 protected:
-//    virtual std::string usage() const override;
-
     /*-------------------------------------------------------------*/
     /*----------------------------IN-------------------------------*/
     /*-------------------------------------------------------------*/
@@ -282,6 +280,9 @@ protected:
 
     /// Clean attributes, reset viewer object.
     void cleanup() override;
+
+    /// Usage instructions.
+    virtual std::string usage() const override;
 
 private:
     easy3d::SoftShadow*     shadow_;

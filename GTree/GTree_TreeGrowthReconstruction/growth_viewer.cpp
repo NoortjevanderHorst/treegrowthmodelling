@@ -66,6 +66,15 @@ GrowthViewer::~GrowthViewer() {}
 /*--------------------------ACCESS-----------------------------*/
 /*-------------------------------------------------------------*/
 
+std::string GrowthViewer::usage() const {
+    return Viewer::usage() + std::string(
+        "  Shift + 'a':         Load and reconstruct test dataset A       \n"
+            "  Shift + 'b':         Load and reconstruct test dataset B       \n"
+            "  Shift + 'c':         Load and reconstruct test dataset C       \n"
+            "  Shift + 'd':         Load and reconstruct test dataset D       \n"
+    );
+}
+
 PointCloud* GrowthViewer::cloud_ts(int time_index) const {
     if (models().size() < time_index){
         std::cout << "ERROR: could not access timestamp point cloud, index does not exist" << std::endl;
