@@ -39,7 +39,7 @@ Branch geometry of all steps can also be generated via the "processing" menu, pr
 
 
 ### Data
-Some test tree point clouds are provided in the '[GTree_examples](./resources/data/GTree_examples)' folder.
+Some test tree point clouds are provided in the 'resources/data/GTree_examples/' folder.
 
 **Note:** When testing on your point clouds, please make sure that:
 - your point cloud represents a single tree (i.e., the tree is segmented out from the background; no ground, no fence...);
