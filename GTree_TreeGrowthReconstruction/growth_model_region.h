@@ -49,12 +49,13 @@
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/index/rtree.hpp>
-#include <3rd_party/kd_tree/Vector3D.h>
-#include <3rd_party/kd_tree/KdTree.h>
+#include <3rd_party/kdtree/ETH_Kd_Tree/vector3D.h>
+#include <3rd_party/kdtree/ETH_Kd_Tree/kdTree.h>
 #include <3rd_party/nlohmann/json.hpp>
 
 #include "graph_gt.h"
 
+using kdtree::Vector3D;
 
 // CGAL geometry (also defined in Lobe, except envelope)
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K_cgal;
@@ -65,6 +66,7 @@ typedef CGAL::Surface_mesh<Point_3_cgal> Surface_mesh_cgal;
 typedef boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian> Point_3_boost;
 typedef boost::geometry::index::rtree<Point_3_boost, boost::geometry::index::quadratic<16> > RTree;
 
+using kdtree::KdTree;
 
 class GModelRegion {
 public:

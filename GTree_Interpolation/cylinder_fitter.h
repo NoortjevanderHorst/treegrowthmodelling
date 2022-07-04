@@ -44,12 +44,12 @@
 #include <easy3d/core/surface_mesh.h>
 #include <easy3d/core/graph.h>
 #include <easy3d/core/principal_axes.h>
-#include <3rd_party/kd_tree/Vector3D.h>
-#include <3rd_party/kd_tree/KdTree.h>
+#include <3rd_party/kdtree/ETH_Kd_Tree/kdTree.h>
 
 #include "graph_boost.h"
 #include "cylinder.h"
 
+using kdtree::KdTree;
 
 //define the graph path to smooth branches
 typedef std::vector<VertexDescriptorGraphB> Path;

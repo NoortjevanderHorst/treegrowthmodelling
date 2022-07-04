@@ -19,7 +19,6 @@ add_subdirectory(glutess)
 add_subdirectory(backward)
 add_subdirectory(easyloggingpp)
 
-add_subdirectory(kd_tree)
 add_subdirectory(optimizer_lm)
 add_subdirectory(cminpack)
 

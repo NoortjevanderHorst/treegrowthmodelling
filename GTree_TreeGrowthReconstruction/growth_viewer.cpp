@@ -583,7 +583,7 @@ void GrowthViewer::draw() const {
                             program->set_uniform("lighting", d->normal_buffer());
                             program->set_uniform("per_vertex_color", d->color_buffer());
                             program->set_uniform("default_color", vec4(0.0f, 0.0f, 0.0f, 1.0f));
-                            d->draw(false);
+                            d->draw(camera());
                         }
                     }
                 }
@@ -620,7 +620,7 @@ void GrowthViewer::draw() const {
                         continue;
                     for (auto d: m->renderer()->lines_drawables()) {
                         if (d->is_visible()) {
-                            d->draw(false);
+                            d->draw(camera());
                         }
                     }
                 }

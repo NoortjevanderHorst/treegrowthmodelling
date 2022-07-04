@@ -4,12 +4,11 @@
 </p>
 
 
-Tree Growth Modelling (GTree) implements the tree reconstruction method described in the following [thesis](https://repository.tudelft.nl/islandora/object/uuid:d284c33a-7297-4509-81e1-e183ed6cca3c/datastream/OBJ/download):
+Tree Growth Modelling (GTree) implements the tree reconstruction method described in the following [thesis](http://resolver.tudelft.nl/uuid:d284c33a-7297-4509-81e1-e183ed6cca3c):
 ```
 Noortje van der Horst.
 Procedural Modelling of Tree Growth Using Multi-temporal Point Clouds.
-Delft University of Technology. 2022.
-URL: http://resolver.tudelft.nl/uuid:d284c33a-7297-4509-81e1-e183ed6cca3c.
+MSc thesis. Delft University of Technology. 2022.
 ```
 
 
@@ -39,7 +38,7 @@ Branch geometry of all steps can also be generated via the "processing" menu, pr
 
 
 ### Data
-Some test tree point clouds are provided in the 'resources/data/GTree_examples/' folder.
+Some test tree point clouds are provided in the [data](./data) directory.
 
 **Note:** When testing on your point clouds, please make sure that:
 - your point cloud represents a single tree (i.e., the tree is segmented out from the background; no ground, no fence...);
@@ -65,7 +64,7 @@ This program is free software; you can redistribute it and/or modify it under th
 
 ---
 
-Should you have any questions, comments, or suggestions, please contact us at liangliang.nan@tudelft.nl
+Should you have any questions, comments, or suggestions, please contact us at [noortje.v.d.horst1@gmail.com](noortje.v.d.horst1@gmail.com).
 
 3D Geoinformation Research Group, TU Delft,
 

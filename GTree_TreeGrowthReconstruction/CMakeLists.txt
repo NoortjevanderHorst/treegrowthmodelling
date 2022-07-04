@@ -87,7 +87,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)
 ### required packages
 find_package(OpenGL REQUIRED)
 message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} 3rd_glew 3rd_glfw 3rd_imgui easy3d::core easy3d::renderer easy3d::util easy3d::fileio easy3d::algo easy3d::viewer 3rd_tetgen cminpack optimizer_lm kd_tree)
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} 3rd_glew 3rd_glfw 3rd_imgui easy3d::core easy3d::renderer easy3d::util easy3d::fileio easy3d::algo easy3d::viewer 3rd_tetgen 3rd_cminpack 3rd_optimizer_lm 3rd_kdtree)
 
 
 find_package(Boost REQUIRED) # It's "Boost", not "BOOST" or "boost". Case matters.

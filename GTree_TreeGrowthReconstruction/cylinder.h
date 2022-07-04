@@ -44,10 +44,12 @@
 #include <ostream>
 #include <istream>
 #include <vector>
-#include <3rd_party/kd_tree/Vector3D.h>
 #include <stdio.h>
-#include <3rd_party/optimizer_lm/optimizer_lm.h>
 
+#include <3rd_party/optimizer_lm/optimizer_lm.h>
+#include <3rd_party/kdtree/ETH_Kd_Tree/vector3D.h>
+
+using kdtree::Vector3D;
 
 class Cylinder
 {

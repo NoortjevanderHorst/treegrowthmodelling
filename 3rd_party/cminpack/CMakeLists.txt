@@ -1,11 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 
-get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-project(${PROJECT_NAME})
+project(3rd_cminpack)
 
-
-
-add_library(${PROJECT_NAME} STATIC 
+add_library(3rd_cminpack STATIC
   chkder.c
     chkder_.c
     covar.c
@@ -61,7 +58,7 @@ add_library(${PROJECT_NAME} STATIC
     minpackP.h
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_cminpack PROPERTIES FOLDER "3rd_party")
 
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${GTREE_cminpack_INCLUDE_DIR})
+target_include_directories(3rd_cminpack PRIVATE ${GTREE_cminpack_INCLUDE_DIR})
